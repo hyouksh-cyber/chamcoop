@@ -51,12 +51,13 @@
     --paper:#0f1729; --paper-2:#141f36; --ink:#e8eefc; --ink-soft:#a9b8d6;
     --line:#2a3855; --white:#182338; --sage-tint:#1c2c4a; --gold-100:#3a2419;
   }
-  html{scroll-behavior:smooth; scroll-padding-top:calc(78px + env(safe-area-inset-top,0px));}
+  html{scroll-behavior:smooth; scroll-padding-top:calc(78px + env(safe-area-inset-top,0px)); overflow-x:hidden;}
   *,*::before,*::after{box-sizing:border-box;}
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font-family:'Noto Sans KR',sans-serif; line-height:1.7; font-size:16px;
     -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
   }
   img{max-width:100%; display:block;}
   a{color:inherit;}
@@ -165,6 +166,7 @@
 
   /* ---------- mission cards ---------- */
   .mission-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:40px; align-items:start;}
+  .mission-grid > div{min-width:0;}
   .mission-copy p{color:var(--ink-soft); font-size:1.03rem; margin-bottom:16px;}
   .info-card{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-m); padding:26px 28px; box-shadow:var(--shadow-card);}
   .info-card dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:10px 16px; font-size:.94rem;}
@@ -182,7 +184,7 @@
   .t-item li{margin-bottom:3px;}
 
   /* org chart */
-  .orgchart-wrap{overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
+  .orgchart-wrap{overflow-x:auto; min-width:0; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
   .orgchart2{min-width:640px; padding:4px 6px 0;}
   .org-node{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-s); padding:10px 16px; font-size:.85rem; font-weight:700; text-align:center; box-shadow:var(--shadow-card); white-space:nowrap; line-height:1.35;}
   .org-node-lead{background:var(--green-800); border-color:var(--green-800); color:#fff;}
@@ -397,7 +399,7 @@
         </div>
         <div class="hero-stats">
           <div><b>2017</b><span>설립총회</span></div>
-          <div><b>4개+</b><span>운영 중인 일자리 사업</span></div>
+          <div><b id="statBizCount">4개+</b><span>운영 중인 일자리 사업</span></div>
           <div><b>100%</b><span>판매수익 일자리 재투자</span></div>
         </div>
       </div>
@@ -760,6 +762,17 @@
         else{ unit.classList.add('open'); body.style.maxHeight = body.scrollHeight+'px'; }
       });
     });
+
+    // 상단 통계("운영 중인 일자리 사업") — businesses.json에 사업/사업단이
+    // 추가·삭제되면 이 숫자도 자동으로 함께 바뀝니다. (진행중 상태인
+    // 사업들의 사업단 개수 합계)
+    var statEl = document.getElementById('statBizCount');
+    if(statEl){
+      var liveUnitCount = list
+        .filter(function(b){ return b.status === 'live'; })
+        .reduce(function(sum, b){ return sum + (b.units ? b.units.length : 0); }, 0);
+      statEl.textContent = liveUnitCount + '개+';
+    }
   }
 
   fetch('businesses.json', {cache:'no-store'})
