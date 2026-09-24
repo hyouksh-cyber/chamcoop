@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<script>
+  (function(){
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    function applyTheme(){ document.documentElement.setAttribute('data-theme', mq.matches ? 'dark' : 'light'); }
+    applyTheme();
+    if(mq.addEventListener){ mq.addEventListener('change', applyTheme); } else if(mq.addListener){ mq.addListener(applyTheme); }
+  })();
+</script>
 <title>참살이사회적협동조합</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,13 +43,13 @@
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]) {
-      --paper:#1b1d17; --paper-2:#22241c; --ink:#eee9da; --ink-soft:#b9b6a4;
-      --line:#3a3c30; --white:#23261d; --sage-tint:#233024; --gold-100:#3a3220;
+      --paper:#0f1729; --paper-2:#141f36; --ink:#e8eefc; --ink-soft:#a9b8d6;
+      --line:#2a3855; --white:#182338; --sage-tint:#1c2c4a; --gold-100:#3a2419;
     }
   }
   :root[data-theme="dark"]{
-    --paper:#1b1d17; --paper-2:#22241c; --ink:#eee9da; --ink-soft:#b9b6a4;
-    --line:#3a3c30; --white:#23261d; --sage-tint:#233024; --gold-100:#3a3220;
+    --paper:#0f1729; --paper-2:#141f36; --ink:#e8eefc; --ink-soft:#a9b8d6;
+    --line:#2a3855; --white:#182338; --sage-tint:#1c2c4a; --gold-100:#3a2419;
   }
   html{scroll-behavior:smooth; scroll-padding-top:calc(78px + env(safe-area-inset-top,0px));}
   *,*::before,*::after{box-sizing:border-box;}
@@ -53,7 +61,7 @@
   img{max-width:100%; display:block;}
   a{color:inherit;}
   h1,h2,h3,h4{font-family:'Gothic A1',sans-serif; font-weight:800; margin:0; color:var(--green-900);}
-  :root[data-theme="dark"] h1,:root[data-theme="dark"] h2,:root[data-theme="dark"] h3,:root[data-theme="dark"] h4{color:#f2eee0;}
+  :root[data-theme="dark"] h1,:root[data-theme="dark"] h2,:root[data-theme="dark"] h3,:root[data-theme="dark"] h4{color:#eef4ff;}
   p{margin:0;}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:0 24px;}
   .ov-x{overflow-x:auto;}
@@ -67,21 +75,21 @@
     border-bottom:1px solid var(--line);
     padding-top:env(safe-area-inset-top,0px);
   }
-  :root[data-theme="dark"] header.site{background:rgba(27,29,23,.92);}
+  :root[data-theme="dark"] header.site{background:rgba(15,23,41,.92);}
   .nav-row{display:flex; align-items:center; justify-content:space-between; height:72px; gap:16px;}
   .brand{display:flex; align-items:center; gap:10px; text-decoration:none; flex-shrink:0;}
   .brand-mark{width:42px;height:42px;border-radius:12px;background:var(--white);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden;padding:3px;}
   .brand-mark svg{width:24px;height:24px;}
   .brand-text{display:flex; flex-direction:column; line-height:1.25;}
   .brand-text b{font-family:'Gothic A1',sans-serif; font-size:1.14rem; color:var(--green-900); letter-spacing:-.01em;}
-  :root[data-theme="dark"] .brand-text b{color:#f2eee0;}
+  :root[data-theme="dark"] .brand-text b{color:#eef4ff;}
   .brand-text span{font-size:.72rem; color:var(--ink-soft);}
   nav.main{display:flex; gap:2px;}
   nav.main a{
     padding:10px 15px; border-radius:999px; text-decoration:none;
     font-size:.94rem; font-weight:500; color:var(--green-800); white-space:nowrap;
   }
-  :root[data-theme="dark"] nav.main a{color:#dcd6c2;}
+  :root[data-theme="dark"] nav.main a{color:#c9d7f2;}
   nav.main a:hover{background:var(--sage-tint);}
   .nts-chip{
     display:flex; align-items:center; gap:6px; padding:7px 12px 7px 8px;
@@ -103,7 +111,7 @@
     overflow-y:auto; box-shadow:-12px 0 30px rgba(0,0,0,.15);
   }
   .drawer-panel a{display:block; padding:13px 4px; text-decoration:none; font-size:1.02rem; color:var(--green-900); border-bottom:1px solid var(--line);}
-  :root[data-theme="dark"] .drawer-panel a{color:#f2eee0;}
+  :root[data-theme="dark"] .drawer-panel a{color:#eef4ff;}
   .drawer-close{width:36px;height:36px;border:none;background:var(--sage-tint);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
 
   @media (max-width:920px){
@@ -122,7 +130,7 @@
   }
   .hero h1{font-size:2.55rem; line-height:1.32; letter-spacing:-.01em; font-weight:600;}
   .hero h1 em{font-style:normal; color:var(--green-700); position:relative;}
-  :root[data-theme="dark"] .hero h1 em{color:#a9c48c;}
+  :root[data-theme="dark"] .hero h1 em{color:#a8c8f5;}
   .hero p.lead{margin-top:22px; font-size:1.08rem; color:var(--ink-soft); max-width:52ch;}
   .hero .cta-row{display:flex; gap:12px; margin-top:32px; flex-wrap:wrap;}
   .btn{
@@ -132,18 +140,18 @@
   .btn-primary{background:var(--green-800); color:#fff;}
   .btn-primary:hover{background:var(--green-900);}
   .btn-ghost{border-color:var(--green-800); color:var(--green-900);}
-  :root[data-theme="dark"] .btn-ghost{border-color:#7c8f66; color:#f2eee0;}
+  :root[data-theme="dark"] .btn-ghost{border-color:#5b7ec2; color:#eef4ff;}
   .btn-ghost:hover{background:var(--sage-tint);}
   .btn-gold{background:var(--gold-500); color:var(--green-900);}
   .btn-gold:hover{background:var(--gold-600);}
   .btn:active{transform:scale(.97);}
   .hero-stats{display:flex; gap:28px; margin-top:44px; flex-wrap:wrap;}
   .hero-stats div b{display:block; font-family:'Gothic A1',sans-serif; font-size:1.5rem; color:var(--green-800);}
-  :root[data-theme="dark"] .hero-stats div b{color:#c7dba9;}
+  :root[data-theme="dark"] .hero-stats div b{color:#a8c8f5;}
   .hero-stats div span{font-size:.82rem; color:var(--ink-soft);}
   .hero-art{position:relative; aspect-ratio:1/1;}
   .blob{position:absolute; inset:6%; background:var(--sage-tint); border-radius:42% 58% 63% 37% / 45% 40% 60% 55%;}
-  :root[data-theme="dark"] .blob{background:#28311f;}
+  :root[data-theme="dark"] .blob{background:#1c2c4a;}
   .hero-art svg{position:relative; width:100%; height:100%;}
 
   /* ---------- section basics ---------- */
@@ -151,7 +159,7 @@
   section.tint{background:var(--paper-2);}
   .sec-head{max-width:640px; margin-bottom:44px;}
   .sec-head .kicker{font-size:.85rem; font-weight:700; color:var(--green-700); margin-bottom:10px; display:block;}
-  :root[data-theme="dark"] .sec-head .kicker{color:#a9c48c;}
+  :root[data-theme="dark"] .sec-head .kicker{color:#a8c8f5;}
   .sec-head h2{font-size:1.9rem; line-height:1.35;}
   .sec-head p{margin-top:14px; color:var(--ink-soft); font-size:1.02rem;}
 
@@ -169,7 +177,7 @@
   .t-item:last-child{padding-bottom:0;}
   .t-item::before{content:"";position:absolute; left:-34px; top:4px; width:12px;height:12px;border-radius:50%;background:var(--gold-500); border:3px solid var(--paper);}
   .t-year{font-family:'Gothic A1',sans-serif; font-weight:700; color:var(--green-800); font-size:1.08rem; margin-bottom:6px;}
-  :root[data-theme="dark"] .t-year{color:#c7dba9;}
+  :root[data-theme="dark"] .t-year{color:#a8c8f5;}
   .t-item ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:.94rem;}
   .t-item li{margin-bottom:3px;}
 
@@ -188,8 +196,8 @@
   .status-pill{align-self:flex-start; font-size:.72rem; font-weight:700; padding:4px 10px; border-radius:999px;}
   .status-live{background:#e2ecd6; color:var(--green-800);}
   .status-plan{background:var(--gold-100); color:#8a651c;}
-  :root[data-theme="dark"] .status-live{background:#2c3a21; color:#c7dba9;}
-  :root[data-theme="dark"] .status-plan{background:#4a3c1b; color:#e8c877;}
+  :root[data-theme="dark"] .status-live{background:#1e3352; color:#a8c8f5;}
+  :root[data-theme="dark"] .status-plan{background:#4a2a1f; color:#ffb08a;}
   .biz-card h3{font-size:1.12rem; line-height:1.4;}
   .biz-card p{color:var(--ink-soft); font-size:.92rem;}
   .biz-sub{list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:6px;}
@@ -200,19 +208,19 @@
     display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px; color:var(--ink-soft);
   }
   .biz-more b{color:var(--green-800); font-family:'Gothic A1',sans-serif; font-size:1.02rem;}
-  :root[data-theme="dark"] .biz-more b{color:#c7dba9;}
+  :root[data-theme="dark"] .biz-more b{color:#a8c8f5;}
 
   /* ---------- accordion (참여방법) ---------- */
   .acc{border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden; background:var(--white);}
   .acc + .acc{margin-top:12px;}
   .acc-head{width:100%; display:flex; align-items:center; justify-content:space-between; background:transparent; border:none; padding:20px 24px; text-align:left; font-size:1rem; font-weight:600; color:var(--green-900);}
-  :root[data-theme="dark"] .acc-head{color:#f2eee0;}
+  :root[data-theme="dark"] .acc-head{color:#eef4ff;}
   .acc-head svg{width:18px;height:18px; flex-shrink:0; transition:transform .2s ease;}
   .acc.open .acc-head svg{transform:rotate(180deg);}
   .acc-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
   .acc-body-inner{padding:0 24px 22px; display:grid; grid-template-columns:1fr 1fr; gap:20px;}
   .acc-body-inner h4{font-size:.85rem; color:var(--green-700); margin-bottom:8px;}
-  :root[data-theme="dark"] .acc-body-inner h4{color:#a9c48c;}
+  :root[data-theme="dark"] .acc-body-inner h4{color:#a8c8f5;}
   .acc-body-inner ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:.9rem;}
   .acc-body-inner li{margin-bottom:4px;}
 
@@ -227,9 +235,9 @@
   .prod-body p.desc{color:var(--ink-soft); font-size:.88rem;}
   .prod-price{margin-top:auto; padding-top:10px; display:flex; align-items:center; justify-content:space-between;}
   .prod-price b{font-size:1.15rem; color:var(--green-800); font-family:'Gothic A1',sans-serif;}
-  :root[data-theme="dark"] .prod-price b{color:#c7dba9;}
+  :root[data-theme="dark"] .prod-price b{color:#a8c8f5;}
   .add-btn{border:1.5px solid var(--green-800); background:transparent; color:var(--green-800); border-radius:999px; padding:8px 16px; font-size:.84rem; font-weight:600;}
-  :root[data-theme="dark"] .add-btn{border-color:#a9c48c; color:#a9c48c;}
+  :root[data-theme="dark"] .add-btn{border-color:#a8c8f5; color:#a8c8f5;}
   .add-btn.added{background:var(--green-800); color:#fff;}
   .prod-more{border:1.5px dashed var(--line); border-radius:var(--radius-m); display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:8px; padding:24px; color:var(--ink-soft);}
 
@@ -265,7 +273,7 @@
     padding:8px 14px; border:1px solid var(--line); border-radius:999px;
     font-size:.84rem; color:var(--green-800); text-decoration:none; background:var(--white);
   }
-  :root[data-theme="dark"] .notice-attach-link{color:#c7dba9;}
+  :root[data-theme="dark"] .notice-attach-link{color:#a8c8f5;}
   .notice-attach-link:hover{border-color:var(--green-700); background:var(--sage-tint);}
 
   /* ---------- donate/contact ---------- */
@@ -274,7 +282,7 @@
   .contact-card h3{font-size:1.1rem; margin-bottom:10px;}
   .contact-card p{color:var(--ink-soft); font-size:.92rem; margin-bottom:18px;}
   .map-link{display:inline-flex; align-items:center; gap:8px; font-size:.88rem; color:var(--green-800); font-weight:600; text-decoration:none; margin-top:6px;}
-  :root[data-theme="dark"] .map-link{color:#c7dba9;}
+  :root[data-theme="dark"] .map-link{color:#a8c8f5;}
 
   /* ---------- footer ---------- */
   footer{background:var(--green-900); color:#d9e2cb; padding:52px 0 calc(28px + env(safe-area-inset-bottom,0px));}
@@ -573,7 +581,7 @@
         <div class="contact-card">
           <h3>주소</h3>
           <p>대전광역시 대덕구 대전로 1032번길 51 (오정동) 3층</p>
-          <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=36.348818,127.419518" target="_blank" rel="noopener">
+          <a class="map-link" href="https://map.kakao.com/link/map/참살이사회적협동조합,36.348818,127.419518" target="_blank" rel="noopener">
             지도에서 열기
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17 17 7M9 7h8v8"/></svg>
           </a>
@@ -884,7 +892,7 @@ var IMGMAP = { p1:PIMG.blueberry_fresh, p2:PIMG.blueberry_bag, p3:PIMG.jam_set, 
       return;
     }
     box.innerHTML = list.map(function(p){
-      var thumb = p.img ? '<div class="press-thumb"><img src="'+p.img+'" alt="'+p.title+'" loading="lazy"></div>' : '';
+      var thumb = p.img ? '<div class="press-thumb"><img src="'+p.img+'" alt="'+p.title+'" loading="lazy" onerror="this.parentElement.style.display=\'none\'"></div>' : '';
       var sourceLink = p.url ? '<a class="press-source" href="'+p.url+'" target="_blank" rel="noopener">'+(p.source||'출처 보기')+' ↗</a>' : (p.source ? '<span class="press-source">'+p.source+'</span>' : '');
       return '<div class="press-card">'
         + thumb
