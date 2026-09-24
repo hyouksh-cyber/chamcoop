@@ -183,22 +183,18 @@
   .t-item ul{margin:0; padding-left:18px; color:var(--ink-soft); font-size:.94rem;}
   .t-item li{margin-bottom:3px;}
 
-  /* org chart */
-  .orgchart-wrap{overflow-x:auto; min-width:0; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
-  .orgchart2{min-width:640px; padding:4px 6px 0;}
-  .org-node{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-s); padding:10px 16px; font-size:.85rem; font-weight:700; text-align:center; box-shadow:var(--shadow-card); white-space:nowrap; line-height:1.35;}
-  .org-node-lead{background:var(--green-800); border-color:var(--green-800); color:#fff;}
-  .org-node-sm{font-weight:500; font-size:.78rem; white-space:normal; max-width:150px; min-width:110px;}
-  .org-row-top{display:flex; align-items:center; justify-content:center;}
-  .org-hline{flex:0 0 auto; width:40px; height:2px; background:var(--line);}
-  .org-branches{display:flex; justify-content:center; gap:20px; margin-top:0;}
-  .org-branch-left{flex:0 0 190px; display:flex; flex-direction:column; align-items:center;}
-  .org-branch-center{flex:0 1 auto; display:flex; flex-direction:column; align-items:center;}
-  .org-vline{width:2px; height:18px; background:var(--line);}
-  .org-hline-wide{height:2px; background:var(--line); width:min(72%,340px);}
-  .org-children{display:flex; gap:14px; justify-content:center; flex-wrap:nowrap;}
-  .org-child{display:flex; flex-direction:column; align-items:center;}
-  .org-vline-short{width:2px; height:14px; background:var(--line);}
+  /* org chart — 이사장을 기준으로 한 카드형 구조 (폭에 맞춰 줄바꿈되어 항상 틀 안에 들어옴) */
+  .org-card{border:1px solid var(--line); border-radius:var(--radius-l); padding:18px; background:var(--paper-2);}
+  .org-top{display:flex; align-items:flex-start; flex-wrap:wrap; gap:0; row-gap:10px;}
+  .org-pill{background:var(--white); border:1px solid var(--line); border-radius:12px; padding:9px 14px; font-size:.85rem; font-weight:700; text-align:center; box-shadow:var(--shadow-card); max-width:100%;}
+  .org-pill-lead{background:var(--green-800); border-color:var(--green-800); color:#fff;}
+  .org-pill-sm{font-weight:500; font-size:.78rem;}
+  .org-link-h{flex:0 0 auto; width:16px; height:2px; background:var(--line); margin-top:19px;}
+  .org-col{display:flex; flex-direction:column;}
+  .org-nested{margin-top:8px; margin-left:14px; padding-left:12px; border-left:2px solid var(--line);}
+  .org-dept-list{margin-top:16px; padding-left:14px; border-left:2px solid var(--line); display:flex; flex-direction:column; gap:8px;}
+  .org-dept-item{position:relative; background:var(--white); border:1px solid var(--line); border-radius:10px; padding:9px 14px; font-size:.85rem; font-weight:500; color:var(--ink); line-height:1.4;}
+  .org-dept-item::before{content:""; position:absolute; left:-14px; top:16px; width:12px; height:2px; background:var(--line);}
   .org-caption{font-size:.78rem; color:var(--ink-soft); margin-top:12px;}
 
   /* ---------- business cards ---------- */
@@ -472,30 +468,23 @@
           </div>
           <div style="margin-top:22px;">
             <h3 style="font-size:1rem; margin-bottom:16px;">조직도</h3>
-            <div class="orgchart-wrap">
-              <div class="orgchart2">
-                <div class="org-row-top">
-                  <div class="org-node">총회 · 이사회</div>
-                  <div class="org-hline"></div>
-                  <div class="org-node org-node-lead">이사장</div>
-                  <div class="org-hline"></div>
-                  <div class="org-node">감사</div>
-                </div>
-                <div class="org-branches">
-                  <div class="org-branch-left">
-                    <div class="org-vline"></div>
-                    <div class="org-node org-node-sm">운영위원회</div>
-                  </div>
-                  <div class="org-branch-center">
-                    <div class="org-vline"></div>
-                    <div class="org-hline-wide"></div>
-                    <div class="org-children">
-                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">노인일자리사업부</div></div>
-                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">총무부</div></div>
-                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">일자리사업개발부<br>및 지역사회지원사업부</div></div>
-                    </div>
+            <div class="org-card">
+              <div class="org-top">
+                <div class="org-pill org-pill-lead">이사장</div>
+                <div class="org-link-h"></div>
+                <div class="org-col">
+                  <div class="org-pill">총회 · 이사회</div>
+                  <div class="org-nested">
+                    <div class="org-pill org-pill-sm">운영위원회</div>
                   </div>
                 </div>
+                <div class="org-link-h"></div>
+                <div class="org-pill">감사</div>
+              </div>
+              <div class="org-dept-list">
+                <div class="org-dept-item">노인일자리사업부</div>
+                <div class="org-dept-item">총무부</div>
+                <div class="org-dept-item">일자리사업개발부 및 지역사회지원사업부</div>
               </div>
             </div>
             <p class="org-caption">* 실제 조직 변경 시 이 조직도는 언제든 수정할 수 있습니다.</p>
