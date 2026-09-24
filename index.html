@@ -182,11 +182,22 @@
   .t-item li{margin-bottom:3px;}
 
   /* org chart */
-  .orgchart{display:flex; flex-direction:column; align-items:center; gap:0;}
-  .org-node{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-s); padding:12px 20px; font-size:.92rem; font-weight:600; text-align:center; box-shadow:var(--shadow-card);}
-  .org-connector{width:2px; height:22px; background:var(--line);}
-  .org-row{display:flex; gap:18px; flex-wrap:wrap; justify-content:center;}
-  .org-row .org-node{font-weight:500; font-size:.88rem;}
+  .orgchart-wrap{overflow-x:auto; padding-bottom:8px; -webkit-overflow-scrolling:touch;}
+  .orgchart2{min-width:540px; padding:4px 6px 0;}
+  .org-node{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-s); padding:10px 16px; font-size:.85rem; font-weight:700; text-align:center; box-shadow:var(--shadow-card); white-space:nowrap; line-height:1.35;}
+  .org-node-lead{background:var(--green-800); border-color:var(--green-800); color:#fff;}
+  .org-node-sm{font-weight:500; font-size:.78rem; white-space:normal; max-width:150px;}
+  .org-row-top{display:flex; align-items:center; justify-content:center;}
+  .org-hline{flex:0 0 auto; width:40px; height:2px; background:var(--line);}
+  .org-branches{display:flex; justify-content:center; margin-top:0;}
+  .org-branch-left{width:34%; display:flex; flex-direction:column; align-items:center;}
+  .org-branch-center{flex:1; display:flex; flex-direction:column; align-items:center;}
+  .org-vline{width:2px; height:18px; background:var(--line);}
+  .org-hline-wide{height:2px; background:var(--line); width:min(72%,340px);}
+  .org-children{display:flex; gap:14px; justify-content:center; flex-wrap:wrap;}
+  .org-child{display:flex; flex-direction:column; align-items:center;}
+  .org-vline-short{width:2px; height:14px; background:var(--line);}
+  .org-caption{font-size:.78rem; color:var(--ink-soft); margin-top:12px;}
 
   /* ---------- business cards ---------- */
   .biz-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
@@ -200,9 +211,13 @@
   :root[data-theme="dark"] .status-plan{background:#4a2a1f; color:#ffb08a;}
   .biz-card h3{font-size:1.12rem; line-height:1.4;}
   .biz-card p{color:var(--ink-soft); font-size:.92rem;}
-  .biz-sub{list-style:none; margin:4px 0 0; padding:0; display:flex; flex-direction:column; gap:6px;}
-  .biz-sub li{font-size:.85rem; color:var(--ink-soft); padding-left:16px; position:relative;}
-  .biz-sub li::before{content:"";position:absolute; left:0; top:9px; width:5px;height:5px;border-radius:50%;background:var(--gold-500);}
+  .biz-units{display:flex; flex-direction:column; gap:7px; margin-top:2px;}
+  .biz-unit{border:1px solid var(--line); border-radius:12px; background:var(--paper-2); overflow:hidden;}
+  .biz-unit-head{width:100%; display:flex; align-items:center; justify-content:space-between; gap:10px; background:none; border:0; padding:10px 14px; font:inherit; font-size:.85rem; font-weight:600; color:var(--ink); text-align:left; cursor:pointer;}
+  .biz-unit-caret{flex:0 0 auto; color:var(--ink-soft); transition:transform .2s ease;}
+  .biz-unit.open .biz-unit-caret{transform:rotate(180deg);}
+  .biz-unit-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
+  .biz-unit-body-inner{padding:0 14px 14px; font-size:.82rem; color:var(--ink-soft); line-height:1.6;}
   .biz-more{
     border:1.5px dashed var(--line); border-radius:var(--radius-m); padding:28px;
     display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px; color:var(--ink-soft);
@@ -454,19 +469,34 @@
             </dl>
           </div>
           <div style="margin-top:22px;">
-            <h3 style="font-size:1rem; margin-bottom:16px;">조직 구성 (예시)</h3>
-            <div class="orgchart">
-              <div class="org-node">이사회 · 이사장</div>
-              <div class="org-connector"></div>
-              <div class="org-node">사무국장</div>
-              <div class="org-connector"></div>
-              <div class="org-row">
-                <div class="org-node">행정·회계팀</div>
-                <div class="org-node">사업운영팀</div>
-                <div class="org-node">생산·판매팀</div>
+            <h3 style="font-size:1rem; margin-bottom:16px;">조직도</h3>
+            <div class="orgchart-wrap">
+              <div class="orgchart2">
+                <div class="org-row-top">
+                  <div class="org-node">총회 · 이사회</div>
+                  <div class="org-hline"></div>
+                  <div class="org-node org-node-lead">이사장</div>
+                  <div class="org-hline"></div>
+                  <div class="org-node">감사</div>
+                </div>
+                <div class="org-branches">
+                  <div class="org-branch-left">
+                    <div class="org-vline"></div>
+                    <div class="org-node org-node-sm">운영위원회</div>
+                  </div>
+                  <div class="org-branch-center">
+                    <div class="org-vline"></div>
+                    <div class="org-hline-wide"></div>
+                    <div class="org-children">
+                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">노인일자리사업부</div></div>
+                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">총무부</div></div>
+                      <div class="org-child"><div class="org-vline-short"></div><div class="org-node org-node-sm">일자리사업개발부<br>및 지역사회지원사업부</div></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-            <p style="font-size:.78rem; color:var(--ink-soft); margin-top:10px;">* 실제 조직도에 맞춰 언제든 수정할 수 있습니다.</p>
+            <p class="org-caption">* 실제 조직 변경 시 이 조직도는 언제든 수정할 수 있습니다.</p>
           </div>
         </div>
       </div>
@@ -650,45 +680,92 @@
   };
 
   // ============================================================
-  // 사업 데이터 — 새 사업이 생기면 이 배열에 한 칸만 추가하면 됩니다.
-  // status: 'live' (진행중) | 'plan' (준비/확대 예정)
+  // 사업 데이터 — businesses.json 파일에서 불러옵니다.
+  // GitHub에서 businesses.json 파일만 열어 수정하면 이 코드는
+  // 건드리지 않고도 사업(카드)이나 사업 안의 세부 사업단(units)을
+  // 추가·수정할 수 있습니다.
+  // - 새 사업(예: 경력단절여성/장애인/다문화가정 전용 사업)이 생기면
+  //   배열에 { icon, status('live'|'plan'), statusLabel, title, desc, units } 항목을 추가
+  // - 사업 안의 개별 사업단 자료가 준비되면 해당 unit의 "detail" 값에
+  //   설명을 채우면, 카드에서 눌렀을 때 그 내용이 펼쳐서 보여집니다.
+  //   detail이 비어 있으면 "준비 중" 문구가 자동으로 표시됩니다.
   // ============================================================
-  var BUSINESSES = [
+  var FALLBACK_BUSINESSES = [
     {
       icon:'elder', status:'live', statusLabel:'진행중',
       title:'노인일자리 및 사회활동지원사업',
-      desc:'보건복지부 시행 사업으로, 어르신이 활기차고 건강한 노후생활을 이어갈 수 있도록 다양한 일자리·사회활동을 지원합니다.',
-      sub:['노인공익활동사업 (사회참여·소득보충)','공동체사업단 (시장형 일자리)','노인역량활용사업 (경력·역량 활용형)','취업지원(취업알선형) 사업']
+      desc:'보건복지부 시행 사업으로, 어르신이 활기차고 건강한 노후생활을 이어갈 수 있도록 다양한 일자리·사회활동을 지원합니다. 아래 4개 유형별로 여러 사업단이 운영되고 있습니다.',
+      units:[
+        {name:'노인공익활동사업 (사회참여·소득보충)', detail:''},
+        {name:'공동체사업단 (시장형 일자리)', detail:''},
+        {name:'노인역량활용사업 (경력·역량 활용형)', detail:''},
+        {name:'취업지원(취업알선형) 사업', detail:''}
+      ]
     },
     {
       icon:'hands', status:'plan', statusLabel:'확대 예정',
       title:'사회적일자리 창출사업',
       desc:'경력단절여성 · 장애인 · 다문화가정 등 취약계층 전반으로 대상을 넓혀, 일자리 창출과 취업 연계를 준비하고 있습니다.',
-      sub:['경력단절여성 일자리 연계 (예정)','장애인 일자리 연계 (예정)','다문화가정 일자리 연계 (예정)']
+      units:[
+        {name:'경력단절여성 일자리 연계 (예정)', detail:''},
+        {name:'장애인 일자리 연계 (예정)', detail:''},
+        {name:'다문화가정 일자리 연계 (예정)', detail:''}
+      ]
     },
     {
       icon:'globe', status:'plan', statusLabel:'확대 예정',
       title:'지역사회기여사업',
       desc:'일자리 창출을 넘어, 지역사회 전반의 복지를 지원하는 사업으로 준비하고 있습니다.',
-      sub:['지역 돌봄·안전 연계 서비스 (예정)','취약계층 생활 지원 사업 (예정)']
+      units:[
+        {name:'지역 돌봄·안전 연계 서비스 (예정)', detail:''},
+        {name:'취약계층 생활 지원 사업 (예정)', detail:''}
+      ]
     }
   ];
 
-  function bizCard(b){
+  var BIZ_PLACEHOLDER = '세부 사업단 정보는 준비 중입니다. 자료가 준비되는 대로 businesses.json에 업데이트할 예정입니다.';
+
+  function bizCard(b, bi){
+    var unitsHtml = (b.units||[]).map(function(u, ui){
+      var body = (u.detail && u.detail.trim()) ? u.detail : BIZ_PLACEHOLDER;
+      return '<div class="biz-unit" data-b="'+bi+'" data-u="'+ui+'">'
+        +'<button class="biz-unit-head" type="button"><span>'+u.name+'</span>'
+        +'<svg class="biz-unit-caret" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
+        +'</button>'
+        +'<div class="biz-unit-body"><div class="biz-unit-body-inner">'+body+'</div></div>'
+      +'</div>';
+    }).join('');
     return '<div class="biz-card">'
       +'<div class="biz-icon">'+ICONS[b.icon]+'</div>'
       +'<span class="status-pill '+(b.status==='live'?'status-live':'status-plan')+'">'+b.statusLabel+'</span>'
       +'<h3>'+b.title+'</h3>'
       +'<p>'+b.desc+'</p>'
-      +'<ul class="biz-sub">'+b.sub.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul>'
+      +'<div class="biz-units">'+unitsHtml+'</div>'
       +'</div>';
   }
-  document.getElementById('bizGrid').innerHTML =
-    BUSINESSES.map(bizCard).join('') +
-    '<div class="biz-more">'
-      +'<b>새로운 사업, 계속 추가됩니다</b>'
-      +'<p style="font-size:.88rem; margin:0;">경력단절여성·장애인·다문화가정 등 새로운 대상과 사업이 결정되는 대로 이 자리에 카드로 추가할 예정입니다.</p>'
-    +'</div>';
+
+  function renderBusinesses(list){
+    var grid = document.getElementById('bizGrid');
+    grid.innerHTML =
+      list.map(bizCard).join('') +
+      '<div class="biz-more">'
+        +'<b>새로운 사업, 계속 추가됩니다</b>'
+        +'<p style="font-size:.88rem; margin:0;">경력단절여성·장애인·다문화가정 등 새로운 대상과 사업이 결정되는 대로 이 자리에 카드로 추가할 예정입니다.</p>'
+      +'</div>';
+    grid.querySelectorAll('.biz-unit').forEach(function(unit){
+      var head = unit.querySelector('.biz-unit-head'), body = unit.querySelector('.biz-unit-body');
+      head.addEventListener('click', function(){
+        var isOpen = unit.classList.contains('open');
+        if(isOpen){ unit.classList.remove('open'); body.style.maxHeight = null; }
+        else{ unit.classList.add('open'); body.style.maxHeight = body.scrollHeight+'px'; }
+      });
+    });
+  }
+
+  fetch('businesses.json', {cache:'no-store'})
+    .then(function(res){ if(!res.ok) throw new Error('not found'); return res.json(); })
+    .then(function(data){ renderBusinesses(data && data.length ? data : FALLBACK_BUSINESSES); })
+    .catch(function(){ renderBusinesses(FALLBACK_BUSINESSES); });
 
   // ============================================================
   // 참여방법 아코디언
