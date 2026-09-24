@@ -191,7 +191,6 @@
   .org-pill-sm{font-weight:500; font-size:.78rem;}
   .org-link-h{flex:0 0 auto; width:16px; height:2px; background:var(--line); margin-top:19px;}
   .org-col{display:flex; flex-direction:column;}
-  .org-nested{margin-top:8px; margin-left:14px; padding-left:12px; border-left:2px solid var(--line);}
   .org-dept-list{margin-top:16px; padding-left:14px; border-left:2px solid var(--line); display:flex; flex-direction:column; gap:8px;}
   .org-dept-item{position:relative; background:var(--white); border:1px solid var(--line); border-radius:10px; padding:9px 14px; font-size:.85rem; font-weight:500; color:var(--ink); line-height:1.4;}
   .org-dept-item::before{content:""; position:absolute; left:-14px; top:16px; width:12px; height:2px; background:var(--line);}
@@ -474,8 +473,8 @@
                 <div class="org-link-h"></div>
                 <div class="org-col">
                   <div class="org-pill">총회 · 이사회</div>
-                  <div class="org-nested">
-                    <div class="org-pill org-pill-sm">운영위원회</div>
+                  <div class="org-dept-list" style="margin-top:10px; margin-left:8px;">
+                    <div class="org-dept-item org-pill-sm">운영위원회</div>
                   </div>
                 </div>
                 <div class="org-link-h"></div>
