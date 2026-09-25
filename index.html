@@ -154,6 +154,12 @@
   .blob{position:absolute; inset:6%; background:var(--sage-tint); border-radius:42% 58% 63% 37% / 45% 40% 60% 55%;}
   :root[data-theme="dark"] .blob{background:#1c2c4a;}
   .hero-art svg{position:relative; width:100%; height:100%;}
+  /* 메인 일러스트 색상 (선·주황·연주황·하늘·흰색) */
+  .hero-art{--art-n:var(--green-800); --art-o:var(--gold-500); --art-o2:var(--gold-600); --art-c:var(--gold-100); --art-s:#cfe0f5; --art-w:var(--white);}
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]) .hero-art{--art-n:#a8c8f5; --art-s:#27406a;}
+  }
+  :root[data-theme="dark"] .hero-art{--art-n:#a8c8f5; --art-s:#27406a;}
 
   /* ---------- section basics ---------- */
   section{padding:78px 0;}
@@ -414,21 +420,64 @@
       <div class="hero-art" aria-hidden="true">
         <div class="blob"></div>
         <svg viewBox="0 0 320 320">
-          <circle cx="118" cy="118" r="46" fill="var(--gold-100)"/>
-          <circle cx="230" cy="90" r="26" fill="var(--gold-500)" opacity=".85"/>
-          <g stroke="var(--green-800)" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M96 150c8-30 30-52 60-58" opacity=".5"/>
-            <path d="M62 210c40-8 78 6 96 34" opacity=".5"/>
+          <path d="M66 262A94 94 0 0 1 254 262Z" fill="var(--art-c)"/>
+          <circle cx="258" cy="76" r="14" fill="var(--art-o)" opacity=".9"/>
+          <path d="M222 52v10M217 57h10M58 92v8M54 96h8" fill="none" stroke="var(--art-o2)" stroke-width="2" stroke-linecap="round"/>
+          <path d="M36 262q-2-34 16-58" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M44 224q-14-4-16-18q14 2 16 18ZM48 212q8-12 22-12q-6 14-22 12Z" fill="var(--art-s)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M276 262q0-18 8-28M282 262q4-12 14-16" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32 262H290" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M92 118Q164 56 244 116" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="2 7" opacity=".5"/>
+          <path d="M164 102C152 94 153 82 164 88C175 82 176 94 164 102Z" fill="var(--art-o)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M58 216V262M58 216q0-8 8-8h2" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M64 262V204q0-30 24-30t24 30V262" fill="var(--art-s)" transform="translate(-4 -3)"/>
+          <path d="M64 262V204q0-30 24-30t24 30V262" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M80 176l8 8l8-8" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M72 192Q63 200 66 208" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <g transform="rotate(7 88 150)">
+          <circle cx="94" cy="132" r="6" fill="var(--art-s)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="88" cy="150" r="17" fill="var(--art-w)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M71.5 152a17 17 0 0 1 33-6q-8-1-13-8q-7 10-20 14Z" fill="var(--art-s)"/>
+          <circle cx="82" cy="153" r="4" fill="none" stroke="var(--art-n)" stroke-width="1.4"/>
+          <circle cx="94" cy="153" r="4" fill="none" stroke="var(--art-n)" stroke-width="1.4"/>
+          <path d="M86 153h4" fill="none" stroke="var(--art-n)" stroke-width="1.4"/>
+          <path d="M84 160q4 3 8 0" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="77" cy="159" r="2.6" fill="var(--art-o)" opacity=".55"/>
+          <circle cx="99" cy="159" r="2.6" fill="var(--art-o)" opacity=".55"/>
           </g>
-          <g transform="translate(70,150)">
-            <path d="M40 100c-24-6-40-26-40-50a44 44 0 0 1 88 0c0 24-16 44-40 50Z" fill="var(--white)" stroke="var(--green-800)" stroke-width="2.2"/>
-            <path d="M40 66v34" stroke="var(--green-800)" stroke-width="2.2" stroke-linecap="round"/>
-            <path d="M22 44c6 8 12 12 18 12s12-4 18-12" stroke="var(--green-800)" stroke-width="2.2" stroke-linecap="round"/>
+          <path d="M190 236V190h9" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M146 236V214q0-26 20-26t20 26V236Z" fill="var(--art-w)" transform="translate(-4 -3)"/>
+          <path d="M146 236V214q0-26 20-26t20 26V236Z" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M159 190l7 7l7-7" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M190 236H136M140 236v18h-12" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M172 218v40M152 238h40" fill="none" stroke="var(--art-n)" stroke-width="1.2" opacity=".45"/>
+          <circle cx="172" cy="238" r="24" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="172" cy="238" r="3" fill="var(--art-n)"/>
+          <circle cx="128" cy="257" r="5" fill="var(--art-w)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <g transform="rotate(-5 166 168)">
+          <circle cx="166" cy="168" r="17" fill="var(--art-w)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M149.5 170a17 17 0 0 1 33-7q-11 1-17-7q-5 9-16 14Z" fill="var(--art-n)" opacity=".85"/>
+          <circle cx="160" cy="171" r="1.8" fill="var(--art-n)"/>
+          <circle cx="172" cy="171" r="1.8" fill="var(--art-n)"/>
+          <path d="M162 177q4 3 8 0" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="155" cy="176" r="2.6" fill="var(--art-o)" opacity=".55"/>
+          <circle cx="177" cy="176" r="2.6" fill="var(--art-o)" opacity=".55"/>
           </g>
-          <g transform="translate(150,120)">
-            <rect x="0" y="30" width="118" height="86" rx="14" fill="var(--white)" stroke="var(--green-800)" stroke-width="2.2"/>
-            <path d="M14 30 30 8h58l16 22" fill="none" stroke="var(--green-800)" stroke-width="2.2" stroke-linejoin="round"/>
-            <path d="M20 62h86M20 82h60" stroke="var(--gold-600)" stroke-width="3" stroke-linecap="round"/>
+          <g transform="rotate(-8 244 150)">
+          <path d="M226 152q0-26 18-26t18 26v20h-36Z" fill="var(--art-n)" opacity=".85"/>
+          </g>
+          <path d="M218 262V204q0-30 26-30t26 30V262" fill="var(--art-o)" opacity=".9" transform="translate(-4 -3)"/>
+          <path d="M218 262V204q0-30 26-30t26 30V262" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M236 176l8 9l8-9" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M228 192Q212 188 200 190" fill="none" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <g transform="rotate(-8 244 150)">
+          <circle cx="244" cy="150" r="17" fill="var(--art-w)" stroke="var(--art-n)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M227.5 152a17 17 0 0 1 33-6q-13 3-21-7q-4 9-12 13Z" fill="var(--art-n)" opacity=".85"/>
+          <circle cx="238" cy="154" r="1.8" fill="var(--art-n)"/>
+          <circle cx="250" cy="154" r="1.8" fill="var(--art-n)"/>
+          <path d="M240 160q4 3 8 0" fill="none" stroke="var(--art-n)" stroke-width="1.6" stroke-linecap="round"/>
+          <circle cx="233" cy="159" r="2.6" fill="var(--art-o)" opacity=".55"/>
+          <circle cx="255" cy="159" r="2.6" fill="var(--art-o)" opacity=".55"/>
           </g>
         </svg>
       </div>
