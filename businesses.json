@@ -19,7 +19,13 @@
     "area": "대덕구 관내 학교",
     "content": "학교 배식 보조 및 배식 후 환경정리" }
       ] },
-      { "name": "공동체사업단 (시장형 일자리)", "detail": "", "programs": [] },
+      { "name": "공동체사업단 (시장형 일자리)", "detail": "", "programs": [
+      { "title": "",
+    "period": "",
+    "slots": ,
+    "area": "",
+    "content": "" }
+      ] },
       { "name": "노인역량활용사업 (경력·역량 활용형)", "detail": "", "programs": [] },
       { "name": "취업지원(취업알선형) 사업", "detail": "", "programs": [] }
     ]
