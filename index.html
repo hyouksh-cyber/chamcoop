@@ -740,7 +740,7 @@
     var rows = PROGRAM_FIELDS.map(function(f){
       var v = p[f[0]];
       if(v === undefined || v === null || String(v).trim() === '') return '';
-      if(f[0] === 'slots' && typeof v === 'number') v = v + '자리';
+      if(f[0] === 'slots' && /^\d+$/.test(String(v).trim())) v = String(v).trim() + '자리';
       return '<dt>'+f[1]+'</dt><dd>'+v+'</dd>';
     }).join('');
     return '<div class="biz-program">'
