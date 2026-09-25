@@ -730,7 +730,7 @@
     }
   ];
 
-  var BIZ_PLACEHOLDER = '세부 사업단 정보는 준비 중입니다. 자료가 준비되는 대로 businesses.json에 업데이트할 예정입니다.';
+  var BIZ_PLACEHOLDER = '세부 사업단 정보는 준비 중입니다. 자료가 준비되는 대로 업데이트할 예정입니다.';
 
   var PROGRAM_FIELDS = [
     ['period','사업기간'], ['slots','배정일자리수'], ['area','활동지역'], ['content','활동내용']
@@ -752,8 +752,10 @@
 
   function bizCard(b, bi){
     var unitsHtml = (b.units||[]).map(function(u, ui){
-      var body = (u.programs && u.programs.length)
-        ? '<div class="biz-programs">'+u.programs.map(programCard).join('')+'</div>'
+      // 제목이 빈칸인 세부사업(작성 중인 빈 양식)은 건너뜀
+      var programs = (u.programs || []).filter(function(p){ return p && p.title && String(p.title).trim(); });
+      var body = programs.length
+        ? '<div class="biz-programs">'+programs.map(programCard).join('')+'</div>'
         : (u.detail && u.detail.trim()) ? u.detail : BIZ_PLACEHOLDER;
       return '<div class="biz-unit" data-b="'+bi+'" data-u="'+ui+'">'
         +'<button class="biz-unit-head" type="button"><span>'+u.name+'</span>'
