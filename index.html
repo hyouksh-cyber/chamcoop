@@ -51,13 +51,13 @@
     --paper:#0f1729; --paper-2:#141f36; --ink:#e8eefc; --ink-soft:#a9b8d6;
     --line:#2a3855; --white:#182338; --sage-tint:#1c2c4a; --gold-100:#3a2419;
   }
-  html{scroll-behavior:smooth; scroll-padding-top:calc(78px + env(safe-area-inset-top,0px)); overflow-x:hidden;}
+  html{scroll-behavior:smooth; scroll-padding-top:calc(78px + env(safe-area-inset-top,0px)); overflow-x:clip;}
   *,*::before,*::after{box-sizing:border-box;}
   body{
     margin:0; background:var(--paper); color:var(--ink);
     font-family:'Noto Sans KR',sans-serif; line-height:1.7; font-size:16px;
     -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
+    overflow-x:clip;
   }
   img{max-width:100%; display:block;}
   a{color:inherit;}
