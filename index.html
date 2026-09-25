@@ -215,6 +215,14 @@
   .biz-unit.open .biz-unit-caret{transform:rotate(180deg);}
   .biz-unit-body{max-height:0; overflow:hidden; transition:max-height .25s ease;}
   .biz-unit-body-inner{padding:0 14px 14px; font-size:.82rem; color:var(--ink-soft); line-height:1.6;}
+  .biz-programs{display:flex; flex-direction:column; gap:10px;}
+  .biz-program{border:1px dashed var(--line); border-radius:10px; background:var(--white); padding:12px; display:flex; flex-direction:column; gap:8px;}
+  .biz-program img{width:100%; aspect-ratio:4/3; object-fit:cover; border-radius:8px; display:block;}
+  .biz-program-title{font-size:.9rem; font-weight:700; color:var(--green-800); line-height:1.4;}
+  :root[data-theme="dark"] .biz-program-title{color:#a8c8f5;}
+  .biz-program dl{margin:0; display:grid; grid-template-columns:auto 1fr; gap:3px 8px; font-size:.8rem;}
+  .biz-program dt{font-weight:600; color:var(--ink); white-space:nowrap;}
+  .biz-program dd{margin:0; color:var(--ink-soft);}
   .biz-more{
     border:1.5px dashed var(--line); border-radius:var(--radius-m); padding:28px;
     display:flex; flex-direction:column; align-items:flex-start; justify-content:center; gap:10px; color:var(--ink-soft);
@@ -679,6 +687,10 @@
   // - 사업 안의 개별 사업단 자료가 준비되면 해당 unit의 "detail" 값에
   //   설명을 채우면, 카드에서 눌렀을 때 그 내용이 펼쳐서 보여집니다.
   //   detail이 비어 있으면 "준비 중" 문구가 자동으로 표시됩니다.
+  // - 사업단 안에 세부사업이 여러 개면 unit에 "programs" 배열을 넣으면
+  //   카드 목록으로 표시됩니다 (detail보다 우선). 각 항목:
+  //   { title, period(사업기간), slots(배정일자리수), area(활동지역),
+  //     content(활동내용), image(사진 경로, 선택) } — 빈 값은 생략됩니다.
   // ============================================================
   var FALLBACK_BUSINESSES = [
     {
@@ -715,9 +727,29 @@
 
   var BIZ_PLACEHOLDER = '세부 사업단 정보는 준비 중입니다. 자료가 준비되는 대로 businesses.json에 업데이트할 예정입니다.';
 
+  var PROGRAM_FIELDS = [
+    ['period','사업기간'], ['slots','배정일자리수'], ['area','활동지역'], ['content','활동내용']
+  ];
+
+  function programCard(p, pi){
+    var rows = PROGRAM_FIELDS.map(function(f){
+      var v = p[f[0]];
+      if(v === undefined || v === null || String(v).trim() === '') return '';
+      if(f[0] === 'slots' && typeof v === 'number') v = v + '자리';
+      return '<dt>'+f[1]+'</dt><dd>'+v+'</dd>';
+    }).join('');
+    return '<div class="biz-program">'
+      +(p.image ? '<img src="'+p.image+'" alt="'+(p.title||'')+'" loading="lazy">' : '')
+      +'<div class="biz-program-title">'+(pi+1)+'. '+(p.title||'')+'</div>'
+      +(rows ? '<dl>'+rows+'</dl>' : '')
+      +'</div>';
+  }
+
   function bizCard(b, bi){
     var unitsHtml = (b.units||[]).map(function(u, ui){
-      var body = (u.detail && u.detail.trim()) ? u.detail : BIZ_PLACEHOLDER;
+      var body = (u.programs && u.programs.length)
+        ? '<div class="biz-programs">'+u.programs.map(programCard).join('')+'</div>'
+        : (u.detail && u.detail.trim()) ? u.detail : BIZ_PLACEHOLDER;
       return '<div class="biz-unit" data-b="'+bi+'" data-u="'+ui+'">'
         +'<button class="biz-unit-head" type="button"><span>'+u.name+'</span>'
         +'<svg class="biz-unit-caret" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'
@@ -748,6 +780,12 @@
         var isOpen = unit.classList.contains('open');
         if(isOpen){ unit.classList.remove('open'); body.style.maxHeight = null; }
         else{ unit.classList.add('open'); body.style.maxHeight = body.scrollHeight+'px'; }
+      });
+      // 사진이 펼친 뒤에 로드되면 높이를 다시 맞춰 잘리지 않게 함
+      body.querySelectorAll('img').forEach(function(img){
+        img.addEventListener('load', function(){
+          if(unit.classList.contains('open')) body.style.maxHeight = body.scrollHeight+'px';
+        });
       });
     });
 
