@@ -99,9 +99,9 @@
   }
   .nts-chip .dot{width:8px;height:8px;border-radius:50%;background:var(--gold-500);}
   .nts-chip:hover{border-color:var(--gold-600); color:var(--ink);}
-  .burger{display:none; width:42px;height:42px;border:none;background:transparent;border-radius:10px;align-items:center;justify-content:center;}
+  .burger{display:none; width:52px;height:52px;border:none;background:transparent;border-radius:10px;align-items:center;justify-content:center;}
   .burger:hover{background:var(--sage-tint);}
-  .burger svg{width:22px;height:22px;}
+  .burger svg{width:32px;height:32px;}
   #mobileDrawer{
     display:none; position:fixed; inset:0; z-index:60; background:rgba(37,48,31,.5);
   }
@@ -271,7 +271,12 @@
   .press-body h3{font-size:1rem; line-height:1.4;}
   .press-body p{font-size:.86rem; color:var(--ink-soft);}
   .press-source{font-size:.78rem; color:var(--ink-soft); text-decoration:none; border-bottom:1px dashed var(--line);}
-  .notice-list{border-top:1px solid var(--line);}
+  .notice-list{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    max-height:560px; overflow-y:auto; -webkit-overflow-scrolling:touch;
+  }
+  .notice-list::-webkit-scrollbar{width:8px;}
+  .notice-list::-webkit-scrollbar-thumb{background:var(--line); border-radius:999px;}
   .notice-item{border-bottom:1px solid var(--line);}
   .notice-head{width:100%; display:flex; align-items:center; gap:16px; padding:18px 6px; background:transparent; border:none; text-align:left;}
   .notice-tag{font-size:.72rem; font-weight:700; color:var(--green-700); background:var(--sage-tint); padding:3px 9px; border-radius:6px; flex-shrink:0;}
