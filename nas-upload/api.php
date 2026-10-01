@@ -1,5 +1,7 @@
 <?php
 date_default_timezone_set('Asia/Seoul');
+ini_set('display_errors', '0');
+register_shutdown_function(function () { $e = error_get_last(); if ($e && in_array($e['type'], [E_ERROR, E_PARSE, E_COMPILE_ERROR], true)) { if (!headers_sent()) { http_response_code(200); header('Content-Type: application/json; charset=utf-8'); } echo json_encode(['ok'=>false,'error'=>'서버 오류: '.$e['message'].' ('.basename($e['file']).':'.$e['line'].')'], JSON_UNESCAPED_UNICODE); } });
 session_start();
 define('D', __DIR__.'/data');
 const RANK = ['top'=>1,'mid'=>2,'admin'=>3,'staff'=>4];
@@ -64,7 +66,7 @@ case 'logout': session_destroy(); out();
 
 case 'me':
   $u = me(); $o = curOrg($u);
-  $allowed = array_values(array_filter(orgs(), fn($x) => in_array($x['id'], orgsOf($u), true)));
+  $allowed = array_values(array_filter(orgs(), function($x) use ($u) { return in_array($x['id'], orgsOf($u), true); }));
   out(['user'=>pubUser($u), 'org'=>$o, 'orgName'=>orgName($o), 'orgs'=>$allowed]);
 
 case 'switch_org':
@@ -81,7 +83,7 @@ case 'org_add':
 case 'org_del':
   $u = me(); need($u, 1); $id = $in['id'] ?? ''; $ol = orgs();
   if (count($ol) < 2) fail('마지막 기관은 삭제할 수 없습니다.');
-  $ol = array_values(array_filter($ol, fn($o) => $o['id'] !== $id)); jwrite(D.'/orgs.json', $ol);
+  $ol = array_values(array_filter($ol, function($o) use ($id) { return $o['id'] !== $id; })); jwrite(D.'/orgs.json', $ol);
   if (is_dir(od($id))) @rename(od($id), D.'/_deleted_'.$id.'_'.date('YmdHis'));
   $us = users(); foreach ($us as &$x) $x['orgs'] = array_values(array_diff($x['orgs'] ?? [], [$id])); jwrite(D.'/users.json', $us);
   if (($_SESSION['org'] ?? '') === $id) $_SESSION['org'] = $ol[0]['id'];
@@ -122,17 +124,17 @@ case 'type_add': case 'type_del': case 'unit_add': case 'unit_del':
   if ($a === 'type_add') { if ($n === '') fail('이름을 입력하세요.'); $t['types'][] = ['id'=>'t'.bin2hex(random_bytes(3)),'name'=>$n]; }
   if ($a === 'unit_add') { if ($n === '') fail('이름을 입력하세요.'); $t['units'][] = ['id'=>'u'.bin2hex(random_bytes(3)),'name'=>$n,'typeId'=>$in['typeId'] ?? '']; }
   if ($a === 'type_del') { foreach ($t['units'] as $x) if ($x['typeId'] === ($in['id'] ?? '')) fail('사업단이 남아 있는 유형은 삭제할 수 없습니다. 사업단을 먼저 삭제하세요.');
-    $t['types'] = array_values(array_filter($t['types'], fn($x) => $x['id'] !== $in['id'])); }
+    $t['types'] = array_values(array_filter($t['types'], function($x) use ($in) { return $x['id'] !== $in['id']; })); }
   if ($a === 'unit_del') { $id = $in['id'] ?? ''; if ($id === 'common') fail('기관공통은 삭제할 수 없습니다.');
     foreach (jread(od($o,'posts.json'), []) as $p) if ($p['unit'] === $id) fail('등록된 게시물이 있는 사업단은 삭제할 수 없습니다.');
-    $t['units'] = array_values(array_filter($t['units'], fn($x) => $x['id'] !== $id)); }
+    $t['units'] = array_values(array_filter($t['units'], function($x) use ($id) { return $x['id'] !== $id; })); }
   jwrite(od($o,'types.json'), $t); out();
 
 // ---------- 게시물 ----------
 case 'posts_list':
   $u = me(); $o = curOrg($u); $k = $_GET['kind'] ?? '';
-  $ps = array_values(array_filter(jread(od($o,'posts.json'), []), fn($p) => $p['kind'] === $k));
-  usort($ps, fn($x, $y) => strcmp($y['date'].$y['id'], $x['date'].$x['id'])); out(['posts'=>$ps]);
+  $ps = array_values(array_filter(jread(od($o,'posts.json'), []), function($p) use ($k) { return $p['kind'] === $k; }));
+  usort($ps, function($x, $y) { return strcmp($y['date'].$y['id'], $x['date'].$x['id']); }); out(['posts'=>$ps]);
 
 case 'post_save':
   $u = me(); $o = curOrg($u); $kind = $_POST['kind'] ?? ''; if (!in_array($kind, KINDS, true)) fail('잘못된 구분입니다.');
@@ -192,7 +194,7 @@ case 'close': case 'unclose':
 // ---------- 서버 저장 ----------
 case 'backup':
   $u = me(); $o = curOrg($u); $scope = $in['scope'] ?? 'org'; $unit = $in['unit'] ?? '';
-  $pack = function ($org) use ($unit) { $ps = jread(od($org,'posts.json'), []); if ($unit !== '') $ps = array_values(array_filter($ps, fn($p) => $p['unit'] === $unit));
+  $pack = function ($org) use ($unit) { $ps = jread(od($org,'posts.json'), []); if ($unit !== '') $ps = array_values(array_filter($ps, function($p) use ($unit) { return $p['unit'] === $unit; }));
     return ['org'=>orgName($org), 'types'=>jread(od($org,'types.json'), []), 'posts'=>$ps, 'closings'=>jread(od($org,'closings.json'), [])]; };
   if ($scope === 'system') { need($u, 2); $data = ['savedAt'=>date('c'), 'orgs'=>orgs(), 'users'=>array_map('pubUser', users()), 'data'=>array_map($pack, orgsOf($u))]; $label = '전체시스템'; $dir = D.'/_backups'; }
   else { if ($unit !== '' && !unitOk($u, $o, $unit)) fail('권한이 없습니다.', 403); $data = $pack($o); $label = $unit !== '' ? '사업단'.$unit : orgName($o); 
@@ -202,7 +204,7 @@ case 'backup':
 
 // ---------- 홈페이지 반영용 내려받기 ----------
 case 'export_site':
-  $u = me(); need($u, 3); $o = curOrg($u); $ps = jread(od($o,'posts.json'), []); usort($ps, fn($x, $y) => strcmp($y['date'], $x['date']));
+  $u = me(); need($u, 3); $o = curOrg($u); $ps = jread(od($o,'posts.json'), []); usort($ps, function($x, $y) { return strcmp($y['date'], $x['date']); });
   $dir = ['notice'=>'files/notice/','press'=>'files/press/','photo'=>'files/photo/']; $j = ['notice'=>[],'press'=>[],'photo'=>[]]; $add = [];
   foreach ($ps as $p) {
     $fs = array_map(function ($f) use ($p, $dir, &$add) { $add[] = [$p['kind'], $f['stored']]; return ['name'=>$f['name'], 'url'=>$dir[$p['kind']].$f['stored']]; }, $p['files']);
@@ -215,7 +217,7 @@ case 'export_site':
   $z->addFromString('notices.json', json_encode($j['notice'], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
   $z->addFromString('press.json', json_encode($j['press'], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
   $z->addFromString('photos.json', json_encode($j['photo'], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
-  foreach ($add as [$k, $st]) $z->addFile(od($o,'uploads/'.$st), $dir[$k].$st);
+  foreach ($add as $ad) $z->addFile(od($o,'uploads/'.$ad[1]), $dir[$ad[0]].$ad[1]);
   $z->close(); header('Content-Type: application/zip'); header("Content-Disposition: attachment; filename*=UTF-8''".rawurlencode('홈페이지반영용-'.stamp().'.zip')); header('Content-Length: '.filesize($tmp)); readfile($tmp); unlink($tmp); exit;
 
 default: fail('알 수 없는 요청입니다.', 404);

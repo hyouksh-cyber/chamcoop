@@ -30,7 +30,7 @@ elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
   }
 }
 $checks = [
-  'PHP 7.4 이상 ('.PHP_VERSION.')' => version_compare(PHP_VERSION,'7.4','>='),
+  'PHP 7.0 이상 ('.PHP_VERSION.')' => version_compare(PHP_VERSION,'7.0','>='),
   '폴더 쓰기 가능' => is_writable(__DIR__),
   'ZipArchive (홈페이지용 묶음 내려받기)' => class_exists('ZipArchive'),
 ];
