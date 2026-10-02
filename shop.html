@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>생산품 | 참살이사회적협동조합</title>
+<meta name="description" content="블루베리 생과·냉동 블루베리·수제 잼 등 참살이 생산품 안내와 주문 요청">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#ffffff">
+<link rel="icon" href="assets/logo.png">
+<link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css?v=4">
+</head>
+<body>
+<a class="skip" href="#main">본문으로 바로가기</a>
+<div id="siteHeader"></div>
+<main id="main">
+<section class="page-head"><div class="wrap"><h1>일자리가 만든 좋은 먹거리</h1><p>계족산 자락에서 무농약·무화학비료로 기른 블루베리와, 어르신들이 직접 만든 수제 잼입니다.</p></div></section>
+<section class="block">
+  <div class="wrap">
+    <div class="prod-grid" id="prodGrid"></div>
+    <div class="jam-note">
+      <img src="files/products/blueberry_jam.jpg" alt="블루베리잼" width="72" height="72" loading="lazy">
+      <img src="files/products/mulberry_jam.jpg" alt="오디잼" width="72" height="72" loading="lazy">
+      <p><b>잼은 낱개로도 구매하실 수 있습니다</b>블루베리잼·오디잼 각 11,000원. 담기 후 주문 메일에 원하는 잼 종류를 적어 주세요.</p>
+    </div>
+    <p class="fine">온라인 결제 준비 전까지는 주문 요청을 이메일 또는 카카오톡 채널로 받아 전화로 안내드립니다. 판매수익 전액은 취약계층 일자리 창출에 다시 쓰입니다.</p>
+  </div>
+</section>
+</main>
+<div id="siteFooter"></div>
+<div class="order-bar" id="orderBar" role="region" aria-label="주문 요청">
+  <div class="wrap">
+    <span aria-live="polite">담은 상품 <b id="orderCount">0</b>개</span>
+    <div class="actions">
+      <a class="btn btn-primary" id="orderMail" href="#">주문 요청 메일 보내기</a>
+      <a class="btn btn-outline" id="orderKakao" href="#" target="_blank" rel="noopener" hidden style="background:transparent;color:#fff;border-color:#4a4a4a">카카오톡으로 주문</a>
+    </div>
+  </div>
+</div>
+<script src="assets/app.js?v=4"></script>
+</body>
+</html>
