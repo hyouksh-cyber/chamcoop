@@ -16,13 +16,17 @@
       .catch(function(){ cb(fallback); });
   }
 
-  // 모바일 메뉴
+  // 모바일 메뉴: 링크 이동, 화면 확대/축소, Esc, 해시 변경 어느 경우에도 닫힘
   var burger = $('burger'), drawer = $('drawer');
+  function closeDrawer(){ drawer.classList.remove('open'); burger.setAttribute('aria-expanded', 'false'); }
   burger.addEventListener('click', function(){
     var open = drawer.classList.toggle('open');
     burger.setAttribute('aria-expanded', open);
   });
-  drawer.addEventListener('click', function(e){ if(e.target.tagName === 'A'){ drawer.classList.remove('open'); burger.setAttribute('aria-expanded','false'); } });
+  drawer.addEventListener('click', function(e){ if(e.target.closest('a')) closeDrawer(); });
+  window.addEventListener('hashchange', closeDrawer);
+  window.addEventListener('resize', function(){ if(window.innerWidth > 1080) closeDrawer(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeDrawer(); });
 
   // 사업소개
   getJSON('businesses.json', [], function(list){
