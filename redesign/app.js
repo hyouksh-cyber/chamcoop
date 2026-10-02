@@ -32,7 +32,7 @@
         var progs = (u.programs || []).filter(function(p){ return p && p.title; });
         var inner = progs.length
           ? '<ul class="prog">' + progs.map(function(p){
-              return '<li><b>' + esc(p.title) + '</b>' + [p.period, p.slots ? p.slots + '명' : '', p.area].filter(Boolean).map(esc).join(' · ') + (p.content ? '<br>' + esc(p.content) : '') + '</li>';
+              return '<li>' + (p.image ? '<img src="' + esc(asset(p.image)) + '" alt="' + esc(p.title) + '" width="400" height="300" loading="lazy">' : '') + '<b>' + esc(p.title) + '</b>' + [p.period, p.slots ? p.slots + '명' : '', p.area].filter(Boolean).map(esc).join(' · ') + (p.content ? '<br>' + esc(p.content) : '') + '</li>';
             }).join('') + '</ul>'
           : '<p class="none">' + esc(u.detail || '사업단 운영 정보 준비 중') + '</p>';
         return '<div class="unit"><h4>' + esc(u.name) + '</h4>' + inner + '</div>';

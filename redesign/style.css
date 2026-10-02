@@ -123,6 +123,7 @@ section.block.soft{background:var(--soft);border-top:1px solid var(--hair-cool);
 .unit .prog{margin-top:10px;font-size:14px;color:var(--mute)}
 .unit .prog li{padding:6px 0;border-top:1px dashed var(--hair-cool)}
 .unit .prog li:first-child{border-top:0}
+.unit .prog img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--r-md);border:1px solid var(--hair);margin-bottom:8px}
 .unit .prog b{color:var(--ink);font-weight:500;display:block}
 .unit .none{margin-top:6px;font-size:14px;color:var(--mute)}
 .biz-more{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
