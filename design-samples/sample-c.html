@@ -1,0 +1,90 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>샘플 C-따뜻한 협동조합(어르신 친화)</title><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fffaf3;--hdr:rgba(255,250,243,.9);--card:#ffffff;--alt:#f4efe3;--ink:#2b2a24;--mute:#6b675a;--line:#eadfca;
+--acc:#2f7d5b;--acc2:#2f7d5b;--onacc:#fff;--rs:50%;--rm:24px;--rb:999px;--sh:0 2px 4px rgba(90,70,20,.06),0 14px 30px -16px rgba(90,70,20,.25);--lead:20px;--halign:center;--lmar:auto;--jc:center;
+--tagbg:#f1ead9;--livebg:#dff1e6;--live:#1f6b49}
+body{font-size:18px}.hero{background:radial-gradient(700px 320px at 50% 0,#ffe9c9,transparent)}
+.btn{padding:15px 28px;font-size:17px}.nav{height:76px}nav{font-size:16px}.card h3{font-size:21px}.card p{font-size:17px}
+em{background:linear-gradient(transparent 62%,#ffd58a 62%)}h1 em{color:inherit}
+
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:'Noto Sans KR','Pretendard',system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.7;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+a{color:inherit;text-decoration:none}
+header.site{position:sticky;top:0;z-index:10;background:var(--hdr);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:68px;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}.brand b{display:block;font-size:16px;line-height:1.2}.brand small{font-size:12px;color:var(--mute)}
+.mark{width:32px;height:32px;border-radius:var(--rs);background:var(--acc);flex:none}
+nav{display:flex;gap:22px;font-size:14px;color:var(--mute)}
+.hero{padding:96px 0 72px;text-align:var(--halign)}
+.badge{display:inline-block;padding:4px 14px;border:1px solid var(--line);border-radius:999px;font-size:13px;color:var(--mute);background:var(--card)}
+h1{font-size:clamp(34px,5.4vw,60px);line-height:1.2;letter-spacing:-.03em;margin:20px 0 18px;font-weight:700}
+h1 em{font-style:normal;color:var(--acc2)}
+.lead{max-width:640px;font-size:var(--lead);color:var(--mute);margin:0 var(--lmar) 28px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:var(--jc)}
+.btn{padding:12px 22px;border-radius:var(--rb);font-weight:600;font-size:15px;border:1px solid var(--line)}
+.btn.pri{background:var(--acc);color:var(--onacc);border-color:transparent}
+.btn.ghost{background:var(--card)}
+.stats{display:flex;gap:40px;margin-top:48px;flex-wrap:wrap;justify-content:var(--jc)}
+.stats b{display:block;font-size:30px;letter-spacing:-.02em}.stats span{font-size:13px;color:var(--mute)}
+section{padding:72px 0}section.alt{background:var(--alt)}
+.kicker{font-size:13px;font-weight:700;color:var(--acc2);letter-spacing:.04em}
+h2{font-size:clamp(26px,3.6vw,38px);letter-spacing:-.02em;margin:6px 0 32px;line-height:1.3}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px}
+.card,.prod{background:var(--card);border:1px solid var(--line);border-radius:var(--rm);box-shadow:var(--sh);overflow:hidden}
+.card{padding:26px}.card h3{margin:14px 0 8px;font-size:19px;line-height:1.4}.card p{margin:0;color:var(--mute);font-size:15px}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:600;background:var(--tagbg);color:var(--mute)}
+.tag.live{background:var(--livebg);color:var(--live)}
+.prod img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:var(--alt)}
+.prod div{padding:18px}.prod h3{margin:0;font-size:17px}.prod small{color:var(--mute)}
+.price{margin:10px 0 0;font-weight:700;font-size:18px;color:var(--acc2)}.price span{font-size:13px;font-weight:400;color:var(--mute)}
+.notice{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.notice li{display:flex;align-items:center;gap:16px;padding:18px 4px;border-bottom:1px solid var(--line)}
+.notice b{flex:1;font-weight:500}.notice time{color:var(--mute);font-size:14px}
+footer{padding:40px 0;border-top:1px solid var(--line);color:var(--mute);font-size:14px}footer b{color:var(--ink)}
+@media(max-width:760px){nav{display:none}.hero{padding:56px 0 40px}}
+</style></head><body>
+<header class="site"><div class="wrap nav">
+  <a class="brand" href="#"><span class="mark"></span><span><b>참살이사회적협동조합</b><small>어르신 · 취약계층 일자리 창출기관</small></span></a>
+  <nav><a>기관소개</a><a>사업소개</a><a>참여방법</a><a>생산품</a><a>공지사항</a><a>오시는길</a></nav>
+</div></header>
+<main>
+<section class="hero"><div class="wrap">
+  <span class="badge">사회적협동조합 · 대전 대덕구</span>
+  <h1>어르신의 하루에, <em>일할 자리</em>와<br>존중받는 시간을 더합니다</h1>
+  <p class="lead">지역 내 취업취약계층 — 어르신, 경력단절여성, 장애인, 다문화가정 — 의 일자리 창출과 채용연계로 건강한 지역공동체를 만들어가는 비영리법인입니다.</p>
+  <div class="cta"><a class="btn pri">사업 살펴보기</a><a class="btn ghost">생산품 구경하기</a></div>
+  <div class="stats"><div><b>2017</b><span>설립총회</span></div><div><b>4개+</b><span>운영 중인 일자리 사업</span></div><div><b>100%</b><span>판매수익 일자리 재투자</span></div></div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="kicker">사업소개</span><h2>지금 운영 중인 일자리 사업</h2>
+  <div class="grid3">
+    <article class="card"><span class="tag live">진행중</span><h3>노인일자리 및 사회활동지원사업</h3><p>보건복지부 시행 사업으로 어르신이 활기차고 건강한 노후생활을 이어가도록 다양한 일자리를 지원합니다.</p></article>
+    <article class="card"><span class="tag live">진행중</span><h3>블루베리 농장 · 수제 잼 제조</h3><p>계족산 자락에서 무농약으로 재배하고, 어르신이 직접 잼과 가공품을 만듭니다.</p></article>
+    <article class="card"><span class="tag soon">준비중</span><h3>경력단절여성 · 장애인 일자리</h3><p>다양한 취업취약계층을 위한 일자리 사업으로 단계적으로 확대할 예정입니다.</p></article>
+  </div>
+</div></section>
+
+<section class="alt"><div class="wrap">
+  <span class="kicker">생산품</span><h2>어르신이 정성껏 만든 바른 먹거리</h2>
+  <div class="grid4">
+    <article class="prod"><img src="../files/products/blueberry_fresh.jpg" alt=""><div><h3>블루베리 생과</h3><small>6~7월 (5월말부터 예약)</small><p class="price">40,000원<span>/kg</span></p></div></article>
+    <article class="prod"><img src="../files/products/blueberry_bag.jpg" alt=""><div><h3>냉동 블루베리</h3><small>연중 판매</small><p class="price">15,000원<span>/kg</span></p></div></article>
+    <article class="prod"><img src="../files/products/jam_set.jpg" alt=""><div><h3>수제 잼 세트</h3><small>선물세트 · 낱개 가능</small><p class="price">문의<span></span></p></div></article>
+    <article class="prod"><img src="../files/products/mulberry_jam.jpg" alt=""><div><h3>오디잼</h3><small>연중 판매</small><p class="price">문의<span></span></p></div></article>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <span class="kicker">공지사항</span><h2>새로운 소식</h2>
+  <ul class="notice">
+    <li><span class="tag">안내</span><b>참살이사회적협동조합 홈페이지가 새롭게 단장했습니다</b><time>2026.09</time></li>
+    <li><span class="tag">생산품</span><b>블루베리 생과 예약 판매 시작 안내</b><time>2026.05</time></li>
+  </ul>
+</div></section>
+</main>
+<footer><div class="wrap"><b>참살이사회적협동조합</b><p>대전광역시 대덕구 대전로 1032번길 51 (오정동) 3층 · 전화 042-331-8012 · chamcoop2018@naver.com</p></div></footer>
+</body></html>
