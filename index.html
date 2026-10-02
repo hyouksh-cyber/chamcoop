@@ -284,6 +284,22 @@
   .press-tag{font-size:.72rem; font-weight:700; color:var(--green-700); background:var(--sage-tint); padding:3px 9px; border-radius:6px; align-self:flex-start;}
   .press-body h3{font-size:1rem; line-height:1.4;}
   .press-body p{font-size:.86rem; color:var(--ink-soft);}
+  .photo-list{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+  .photo-card{background:var(--white); border:1px solid var(--line); border-radius:var(--radius-m); overflow:hidden; box-shadow:var(--shadow-card); cursor:pointer;}
+  .photo-thumb{aspect-ratio:4/3; background:var(--sage-tint); overflow:hidden; position:relative;}
+  .photo-thumb img{width:100%; height:100%; object-fit:cover; transition:transform .3s;}
+  .photo-card:hover .photo-thumb img{transform:scale(1.04);}
+  .photo-count{position:absolute; right:8px; bottom:8px; background:rgba(0,0,0,.6); color:#fff; font-size:.72rem; padding:2px 8px; border-radius:10px;}
+  .photo-meta{padding:12px 14px;}
+  .photo-meta h3{font-size:.95rem; line-height:1.4; margin:4px 0 2px;}
+  .photo-meta small{color:var(--ink-soft); font-size:.78rem;}
+  .lb{position:fixed; inset:0; background:rgba(0,0,0,.88); z-index:999; display:none; flex-direction:column; align-items:center; justify-content:center; padding:20px;}
+  .lb.on{display:flex;}
+  .lb img{max-width:94vw; max-height:70vh; border-radius:8px;}
+  .lb-cap{color:#fff; margin-top:12px; text-align:center; max-width:760px; font-size:.92rem; line-height:1.6;}
+  .lb-btn{position:absolute; top:50%; transform:translateY(-50%); background:rgba(255,255,255,.18); color:#fff; border:0; width:46px; height:46px; border-radius:50%; font-size:1.4rem; cursor:pointer;}
+  .lb-btn.prev{left:14px;}.lb-btn.next{right:14px;}
+  .lb-x{position:absolute; top:14px; right:18px; background:none; border:0; color:#fff; font-size:2rem; cursor:pointer;}
   .press-source{font-size:.78rem; color:var(--ink-soft); text-decoration:none; border-bottom:1px dashed var(--line);}
   .notice-list{
     border-top:1px solid var(--line); border-bottom:1px solid var(--line);
@@ -368,6 +384,7 @@
       <a href="#shop">생산품</a>
       <a href="#notice">공지사항</a>
       <a href="#press">보도자료</a>
+      <a href="#photos">사진자료</a>
       <a href="#contact">오시는길</a>
     </nav>
     <a class="nts-chip desktop-only" href="https://www.nts.go.kr" target="_blank" rel="noopener">
@@ -392,6 +409,7 @@
     <a href="#donate">후원안내</a>
     <a href="#notice">공지사항</a>
     <a href="#press">보도자료</a>
+    <a href="#photos">사진자료</a>
     <a href="#contact">오시는길</a>
     <a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청 홈페이지 ↗</a>
   </div>
@@ -651,6 +669,19 @@
       <div class="press-list" id="pressList"></div>
     </div>
   </section>
+
+  <!-- ===================== PHOTOS ===================== -->
+  <section id="photos">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">사진자료</span>
+        <h2>활동 사진</h2>
+        <p>참살이사회적협동조합의 활동 모습을 사진으로 만나보세요. 사진을 누르면 크게 볼 수 있습니다.</p>
+      </div>
+      <div class="photo-list" id="photoList"></div>
+    </div>
+  </section>
+  <div class="lb" id="lb"><button class="lb-x" id="lbX" aria-label="닫기">×</button><button class="lb-btn prev" id="lbP" aria-label="이전">‹</button><img id="lbImg" alt=""><button class="lb-btn next" id="lbN" aria-label="다음">›</button><div class="lb-cap" id="lbCap"></div></div>
 
   <!-- ===================== CONTACT ===================== -->
   <section id="contact" class="tint">
@@ -924,7 +955,7 @@ var IMGMAP = { p1:PIMG.blueberry_fresh, p2:PIMG.blueberry_bag, p3:PIMG.jam_set, 
 
   function prodCard(p){
     var priceLabel = (p.price===null || p.price===undefined) ? '가격 문의' : (p.price.toLocaleString()+'원 / '+p.unit);
-    var imgSrc = IMGMAP[p.id];
+    var imgSrc = p.img || IMGMAP[p.id];
     var thumb = imgSrc
       ? '<img src="'+imgSrc+'" alt="'+p.name+'" loading="lazy" style="width:100%;height:100%;object-fit:cover;">'
       : ICONS.berry.replace('currentColor','var(--green-700)');
@@ -1081,6 +1112,49 @@ var IMGMAP = { p1:PIMG.blueberry_fresh, p2:PIMG.blueberry_bag, p3:PIMG.jam_set, 
     .then(function(res){ if(!res.ok) throw new Error('not found'); return res.json(); })
     .then(function(data){ renderPress(data); })
     .catch(function(){ renderPress(FALLBACK_PRESS); });
+
+  // ============================================================
+  // 사진자료 — photos.json 파일에서 불러옵니다. (admin.html 에서 올립니다)
+  // ============================================================
+  var PHOTOS = [], lbSet = [], lbIdx = 0;
+  function renderPhotos(list){
+    PHOTOS = list || [];
+    var box = document.getElementById('photoList');
+    if(!PHOTOS.length){
+      box.innerHTML = '<p style="padding:24px 6px; color:var(--ink-soft);">등록된 사진이 없습니다. 활동 사진이 올라오면 이 자리에 표시됩니다.</p>';
+      return;
+    }
+    box.innerHTML = PHOTOS.map(function(p,i){
+      var im = (p.images||[]);
+      return '<div class="photo-card" data-i="'+i+'"><div class="photo-thumb"><img src="'+im[0]+'" alt="'+p.title+'" loading="lazy">'
+        + (im.length>1 ? '<span class="photo-count">'+im.length+'장</span>' : '')
+        + '</div><div class="photo-meta">'+(p.tag?'<span class="press-tag">'+p.tag+'</span>':'')+'<h3>'+p.title+'</h3><small>'+(p.date||'')+'</small></div></div>';
+    }).join('');
+    box.querySelectorAll('.photo-card').forEach(function(c){
+      c.addEventListener('click', function(){ openLb(+c.getAttribute('data-i'), 0); });
+    });
+  }
+  function showLb(){
+    var p = PHOTOS[lbIdx[0]], im = p.images;
+    document.getElementById('lbImg').src = im[lbIdx[1]];
+    document.getElementById('lbCap').innerHTML = '<b>'+p.title+'</b>'+(im.length>1?' ('+(lbIdx[1]+1)+'/'+im.length+')':'')+(p.body?'<br>'+p.body:'');
+  }
+  function openLb(i,j){ lbIdx=[i,j]; showLb(); document.getElementById('lb').classList.add('on'); }
+  function stepLb(d){ var n=PHOTOS[lbIdx[0]].images.length; lbIdx[1]=(lbIdx[1]+d+n)%n; showLb(); }
+  document.getElementById('lbX').addEventListener('click', function(){ document.getElementById('lb').classList.remove('on'); });
+  document.getElementById('lbP').addEventListener('click', function(){ stepLb(-1); });
+  document.getElementById('lbN').addEventListener('click', function(){ stepLb(1); });
+  document.getElementById('lb').addEventListener('click', function(e){ if(e.target.id==='lb') this.classList.remove('on'); });
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('lb').classList.contains('on')) return;
+    if(e.key==='Escape') document.getElementById('lb').classList.remove('on');
+    if(e.key==='ArrowLeft') stepLb(-1); if(e.key==='ArrowRight') stepLb(1);
+  });
+  fetch('photos.json', {cache:'no-store'})
+    .then(function(res){ if(!res.ok) throw new Error('not found'); return res.json(); })
+    .then(function(data){ renderPhotos(data); })
+    .catch(function(){ renderPhotos([]); });
+
 
 })();
 </script>

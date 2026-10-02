@@ -1,0 +1,163 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>공지·보도자료·사진 관리</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:'Malgun Gothic',sans-serif;background:#f3f6f4;color:#222}
+header{background:#1f6b4a;color:#fff;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}header b{font-size:17px}header .sp{flex:1}
+header select,header button{padding:6px 10px;border-radius:6px;border:0;font:inherit}
+.wrap{display:flex;min-height:calc(100vh - 52px)}nav{width:180px;background:#fff;border-right:1px solid #ddd;padding:10px 0;flex-shrink:0}
+nav a{display:block;padding:11px 18px;cursor:pointer;color:#333}nav a:hover{background:#eef6f1}nav a.on{background:#dff0e6;font-weight:bold;color:#1f6b4a;border-left:4px solid #2e7d5b}
+nav hr{border:0;border-top:1px solid #eee}main{flex:1;padding:18px;min-width:0}
+h2{margin:0 0 12px;font-size:20px}.bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px}
+button.b,.b{padding:8px 14px;border:0;border-radius:6px;background:#2e7d5b;color:#fff;cursor:pointer;font:inherit}.b.g{background:#6c7a73}.b.r{background:#c0392b}.b.o{background:#d98324}.b.s{padding:4px 9px;font-size:13px}
+input,select,textarea{padding:8px;border:1px solid #bbb;border-radius:6px;font:inherit;background:#fff}textarea{width:100%}
+.card{background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:10px;box-shadow:0 1px 4px #0001}
+.card h3{margin:0 0 4px;font-size:16px}.meta{font-size:12px;color:#777;margin-bottom:6px}.tag{background:#e3f1ea;color:#1f6b4a;padding:1px 8px;border-radius:10px;font-size:12px;margin-right:4px}
+.lock{background:#fde8e6;color:#c0392b}.thumbs{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0}.thumbs img{height:80px;border-radius:6px;border:1px solid #ddd;cursor:zoom-in}
+table{border-collapse:collapse;width:100%;background:#fff}th,td{border:1px solid #e1e1e1;padding:7px 9px;text-align:left;font-size:14px;vertical-align:top}th{background:#eef3f0}
+.modal{position:fixed;inset:0;background:#0006;display:none;align-items:flex-start;justify-content:center;overflow:auto;padding:20px;z-index:9}.modal.on{display:flex}
+.mbox{background:#fff;border-radius:12px;padding:20px;width:640px;max-width:100%}.mbox label{display:block;margin:10px 0 3px;font-weight:bold;font-size:13px}.mbox input,.mbox select{width:100%}
+.drop{border:2px dashed #9bc4af;border-radius:8px;padding:16px;text-align:center;color:#5a7a69;cursor:pointer;background:#f7fbf8}.drop.hv{background:#e3f1ea}
+.fl{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.fi{background:#f1f1f1;border-radius:6px;padding:4px 8px;font-size:13px;display:flex;align-items:center;gap:6px}.fi img{height:44px;border-radius:4px}.fi i{cursor:pointer;color:#c0392b;font-style:normal;font-weight:bold}
+#toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#333;color:#fff;padding:10px 18px;border-radius:8px;display:none;z-index:99}
+.chk label{display:inline-block;margin:2px 10px 2px 0;font-weight:normal}
+@media(max-width:700px){.wrap{flex-direction:column}nav{width:100%;display:flex;overflow:auto;padding:0}nav a{white-space:nowrap}}
+</style></head><body>
+<header><b>📂 공지·보도자료·사진 관리</b><span id="orgLabel"></span><select id="orgSel" onchange="switchOrg(this.value)" style="display:none"></select><span class="sp"></span><span id="who"></span><button onclick="logout()">로그아웃</button></header>
+<div class="wrap"><nav id="nav"></nav><main id="main"></main></div>
+<div class="modal" id="modal"><div class="mbox" id="mbox"></div></div><div id="toast"></div>
+<script>
+const $=i=>document.getElementById(i), esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RN={top:'최고관리자',mid:'중간관리자',admin:'관리자',staff:'담당자'}, KN={notice:'공지사항',press:'보도자료',photo:'사진자료'};
+let S={},T={types:[],units:[]},view='notice',closings={},filt={unit:'',month:''},posts=[],dirHandle=null;
+function toast(t){const e=$('toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2800)}
+async function api(a,d,q=''){const r=await fetch('api.php?a='+a+q,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(d||{})});
+ const j=await r.json();if(r.status==401){location.href='index.html';throw 0}if(!j.ok){toast(j.error);throw j.error}return j}
+async function get(a,q=''){const r=await fetch('api.php?a='+a+q);const j=await r.json();if(r.status==401){location.href='index.html';throw 0}if(!j.ok){toast(j.error);throw j.error}return j}
+const rk=()=>({top:1,mid:2,admin:3,staff:4}[S.user.role]);
+const hasMenu=m=>rk()<=2||S.user.menus.includes(m);
+const myUnits=()=>rk()<=2?T.units.map(u=>u.id):(S.user.units?.[S.org]||[]);
+const uName=id=>T.units.find(u=>u.id==id)?.name||id;
+async function boot(){S=await get('me');T=await get('types_get');
+ $('orgLabel').textContent='['+S.orgName+']';$('who').textContent=S.user.name+' ('+RN[S.user.role]+')';
+ const sel=$('orgSel');sel.style.display=S.orgs.length>1?'':'none';sel.innerHTML=S.orgs.map(o=>`<option value="${o.id}" ${o.id==S.org?'selected':''}>${esc(o.name)}</option>`).join('');
+ const items=[['notice','📢 공지사항'],['press','📰 보도자료'],['photo','📷 사진자료'],['closing','🔒 월 마감'],['saveall','💾 저장/내려받기']];
+ let h=items.filter(i=>['saveall'].includes(i[0])||hasMenu(i[0])).map(i=>`<a data-v="${i[0]}" onclick="go('${i[0]}')">${i[1]}</a>`).join('');
+ if(rk()<=2)h+='<hr><a data-v="types" onclick="go(\'types\')">🏷 사업유형·사업단</a><a data-v="users" onclick="go(\'users\')">👥 사용자 관리</a>';
+ if(rk()==1)h+='<a data-v="orgs" onclick="go(\'orgs\')">🏢 기관 관리</a>';
+ $('nav').innerHTML=h;const first=['notice','press','photo','closing'].find(hasMenu)||'saveall';go(view&&document.querySelector(`[data-v=${view}]`)?view:first)}
+async function switchOrg(o){await api('switch_org',{org:o});localStorage.setItem('lastOrg',o);boot()}
+async function logout(){await api('logout');location.href='index.html'}
+function go(v){view=v;document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('on',a.dataset.v==v));
+ ({notice:vPosts,press:vPosts,photo:vPosts,closing:vClosing,saveall:vSave,types:vTypes,users:vUsers,orgs:vOrgs})[v](v)}
+const nowMonth=()=>new Date().toISOString().slice(0,7);
+function isClosed(unit,date){return !!closings[unit+'|'+(date||'').slice(0,7)]}
+// ---------- 게시물 ----------
+async function vPosts(kind){closings=(await get('closings_get')).closings;posts=(await get('posts_list','&kind='+kind)).posts;renderPosts(kind)}
+function renderPosts(kind){
+ const list=posts.filter(p=>(!filt.unit||p.unit==filt.unit)&&(!filt.month||p.date.startsWith(filt.month)));
+ const canW=hasMenu(kind);
+ $('main').innerHTML=`<h2>${KN[kind]}</h2><div class="bar">
+ <select onchange="filt.unit=this.value;renderPosts('${kind}')"><option value="">전체 사업단</option>${T.units.map(u=>`<option value="${u.id}" ${filt.unit==u.id?'selected':''}>${esc(u.name)}</option>`).join('')}</select>
+ <input type="month" value="${filt.month}" onchange="filt.month=this.value;renderPosts('${kind}')">
+ ${canW?`<button class="b" onclick="editPost('${kind}')">＋ 새로 올리기</button>`:''}
+ <span style="flex:1"></span>
+ <button class="b g s" onclick="saveData('server',filt.unit)">이 화면 서버저장</button><button class="b g s" onclick="saveData('local',filt.unit)">이 화면 내컴퓨터저장</button></div>
+ ${list.map(p=>cardHtml(p,canW)).join('')||'<div class="card">등록된 글이 없습니다.</div>'}`}
+function cardHtml(p,canW){const cl=isClosed(p.unit,p.date),can=canW&&(rk()<=2||myUnits().includes(p.unit))&&!cl;
+ const imgs=p.files.filter(f=>/\.(jpe?g|png|gif|webp)$/i.test(f.stored)),oth=p.files.filter(f=>!imgs.includes(f));
+ return `<div class="card"><h3>${esc(p.title)}</h3><div class="meta"><span class="tag">${esc(uName(p.unit))}</span>${p.tag?`<span class="tag">${esc(p.tag)}</span>`:''}${p.date} · ${esc(p.author)}${cl?' <span class="tag lock">🔒 마감</span>':''}${p.source?' · 출처: '+esc(p.source):''}</div>
+ <div style="white-space:pre-wrap;font-size:14px">${esc(p.body)}</div>${p.url?`<div><a href="${esc(p.url)}" target="_blank">${esc(p.url)}</a></div>`:''}
+ <div class="thumbs">${imgs.map(f=>`<img src="api.php?a=file&k=${f.stored}" onclick="window.open(this.src)">`).join('')}</div>
+ ${oth.map(f=>`<div>📎 <a href="api.php?a=file&k=${f.stored}&name=${encodeURIComponent(f.name)}">${esc(f.name)}</a></div>`).join('')}
+ ${can?`<div style="margin-top:8px"><button class="b s" onclick="editPost('${p.kind}','${p.id}')">수정</button> <button class="b r s" onclick="delPost('${p.id}','${p.kind}')">삭제</button></div>`:''}</div>`}
+let pending=[],keep=[];
+function editPost(kind,id){const p=id?posts.find(x=>x.id==id):null;pending=[];keep=p?p.files.map(f=>f.stored):[];const mu=myUnits().filter(u=>T.units.some(x=>x.id==u));
+ if(!mu.length)return toast('배정된 사업단이 없습니다. 관리자에게 사업단 배정을 요청하세요.');
+ const isImg=kind!='notice';
+ $('mbox').innerHTML=`<h2>${KN[kind]} ${p?'수정':'올리기'}</h2><form id="pf" onsubmit="return savePost(event,'${kind}','${id||''}')">
+ <label>사업단</label><select name="unit">${mu.map(u=>`<option value="${u}" ${p&&p.unit==u?'selected':''}>${esc(uName(u))}</option>`).join('')}</select>
+ <label>날짜</label><input type="date" name="date" required value="${p?p.date:new Date().toISOString().slice(0,10)}">
+ <label>${kind=='notice'?'분류 (예: 모집, 안내, 채용공고)':kind=='press'?'분류 (예: 지역소식, 언론보도)':'분류 (예: 행사, 활동사진)'}</label><input name="tag" value="${esc(p?.tag||'')}">
+ <label>제목</label><input name="title" required value="${esc(p?.title||'')}">
+ <label>내용</label><textarea name="body" rows="6">${esc(p?.body||'')}</textarea>
+ ${kind=='press'?`<label>출처 (언론사/기관)</label><input name="source" value="${esc(p?.source||'')}"><label>기사 링크 주소</label><input name="url" value="${esc(p?.url||'')}">`:''}
+ <label>${isImg?'사진 (여러 장 가능, 자동으로 크기 줄임)':'첨부파일 (hwp, pdf, 이미지 등)'}</label>
+ <div class="drop" id="drop" onclick="$('fin').click()">📁 여기에 파일을 끌어다 놓거나 클릭하여 선택</div>
+ <input type="file" id="fin" multiple hidden ${isImg?'accept="image/*"':''} onchange="addFiles(this.files);this.value=''"><div class="fl" id="fl"></div>
+ <div style="margin-top:16px;text-align:right"><button type="button" class="b g" onclick="closeM()">취소</button> <button class="b">저장</button></div></form>`;
+ $('modal').classList.add('on');window._p=p;renderFl();
+ const d=$('drop');d.ondragover=e=>{e.preventDefault();d.classList.add('hv')};d.ondragleave=()=>d.classList.remove('hv');d.ondrop=e=>{e.preventDefault();d.classList.remove('hv');addFiles(e.dataTransfer.files)}}
+function closeM(){$('modal').classList.remove('on')}
+async function addFiles(fs){for(const f of fs){pending.push(/^image\/(jpeg|png)/.test(f.type)?await shrink(f):f)}renderFl()}
+function shrink(f){return new Promise(res=>{const im=new Image(),u=URL.createObjectURL(f);im.onload=()=>{const m=1920,s=Math.min(1,m/Math.max(im.width,im.height));if(s==1&&f.size<1.5e6){res(f);return}
+ const c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);
+ c.toBlob(b=>res(new File([b],f.name.replace(/\.\w+$/,'')+'.jpg',{type:'image/jpeg'})),'image/jpeg',.86)};im.onerror=()=>res(f);im.src=u})}
+function renderFl(){const p=window._p;let h='';
+ if(p)p.files.filter(f=>keep.includes(f.stored)).forEach(f=>h+=`<div class="fi">${/\.(jpe?g|png|gif|webp)$/i.test(f.stored)?`<img src="api.php?a=file&k=${f.stored}">`:'📎'}${esc(f.name)}<i onclick="keep=keep.filter(k=>k!='${f.stored}');renderFl()">✕</i></div>`);
+ pending.forEach((f,i)=>h+=`<div class="fi">${f.type.startsWith('image/')?`<img src="${URL.createObjectURL(f)}">`:'📎'}${esc(f.name)} (${Math.round(f.size/1024)}KB)<i onclick="pending.splice(${i},1);renderFl()">✕</i></div>`);
+ $('fl').innerHTML=h}
+async function savePost(e,kind,id){e.preventDefault();const fd=new FormData($('pf'));fd.append('kind',kind);if(id)fd.append('id',id);fd.append('keep',JSON.stringify(keep));
+ pending.forEach(f=>fd.append('files[]',f,f.name));
+ const r=await fetch('api.php?a=post_save',{method:'POST',body:fd});const j=await r.json();if(!j.ok){toast(j.error);return false}
+ toast('저장되었습니다.');closeM();vPosts(kind);return false}
+async function delPost(id,kind){if(!confirm('삭제할까요? (첨부파일도 함께 삭제됩니다)'))return;await api('post_delete',{id});toast('삭제됨');vPosts(kind)}
+// ---------- 마감 ----------
+async function vClosing(){closings=(await get('closings_get')).closings;const m=filt.cm||nowMonth();filt.cm=m;
+ const canUn=rk()==1||S.user.canUnlock;
+ $('main').innerHTML=`<h2>월 마감</h2><div class="bar"><input type="month" value="${m}" onchange="filt.cm=this.value;vClosing()"><span style="color:#777;font-size:13px">마감된 월은 해제 전까지 수정·삭제가 불가합니다. 해제는 최고관리자/해제자격자만 가능합니다.</span></div>
+ <table><tr><th>사업단</th><th>상태</th><th>처리</th></tr>${T.units.map(u=>{const c=closings[u.id+'|'+m];const mine=rk()<=2||myUnits().includes(u.id);
+ return `<tr><td>${esc(u.name)}</td><td>${c?`🔒 마감 (${esc(c.by)}, ${c.at.slice(0,16).replace('T',' ')})`:'열림'}</td><td>${c?(canUn?`<button class="b o s" onclick="doClose('unclose','${u.id}')">마감 해제</button>`:'-'):(mine?`<button class="b s" onclick="doClose('close','${u.id}')">마감</button>`:'-')}</td></tr>`}).join('')}</table>`}
+async function doClose(a,u){if(!confirm(a=='close'?'마감하면 이후 수정할 수 없습니다. 마감할까요?':'마감을 해제할까요?'))return;await api(a,{unit:u,month:filt.cm});vClosing()}
+// ---------- 저장 ----------
+function stamp(){const d=new Date(),p=n=>String(n).padStart(2,'0');return `${d.getFullYear()}년${p(d.getMonth()+1)}월${p(d.getDate())}일${p(d.getHours())}시${p(d.getMinutes())}분`}
+const safeN=s=>s.replace(/[\\\/:*?"<>|]/g,'_');
+async function saveData(where,unit,scope){
+ if(where=='server'){const r=await api('backup',{unit:unit||'',scope:scope||'org'});toast('서버에 저장됨: '+r.file);return}
+ let data;if(scope=='system'){data={savedAt:new Date().toISOString(),org:S.orgName,types:T,posts:{}};for(const k of['notice','press','photo'])data.posts[k]=(await get('posts_list','&kind='+k)).posts}
+ else{const all=[];for(const k of['notice','press','photo'])all.push(...(await get('posts_list','&kind='+k)).posts);data={org:S.orgName,types:T,posts:unit?all.filter(p=>p.unit==unit):all}}
+ const label=scope=='system'?'전체시스템':unit?uName(unit):S.orgName,name=`${safeN(label)}-${stamp()}-${safeN(S.user.name)}.json`,blob=new Blob([JSON.stringify(data,null,1)],{type:'application/json'});
+ if(dirHandle){try{const fh=await dirHandle.getFileHandle(name,{create:true}),w=await fh.createWritable();await w.write(blob);await w.close();toast('지정 폴더에 저장됨: '+name);return}catch(e){toast('폴더 저장 실패, 일반 다운로드로 진행합니다.')}}
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();toast('내 컴퓨터에 저장: '+name)}
+async function pickDir(){if(!window.showDirectoryPicker||!window.isSecureContext)return alert('이 접속 주소(http)에서는 브라우저 보안 정책상 폴더 지정을 지원하지 않습니다.\n\n대신 브라우저 설정 > 다운로드 > "다운로드 전에 저장 위치 확인"을 켜면 저장할 때마다 폴더를 고를 수 있습니다.\n(주소를 https로 바꾸거나 localhost로 접속하면 폴더 지정이 가능합니다.)');
+ try{dirHandle=await showDirectoryPicker({mode:'readwrite'});$('dirname').textContent='저장 폴더: '+dirHandle.name}catch(e){}}
+function vSave(){const sys=rk()<=2;$('main').innerHTML=`<h2>저장 / 내려받기</h2>
+ <div class="card"><h3>내 컴퓨터 저장 폴더</h3><div class="meta">저장 파일명: 사업명-0000년00월00일00시00분-저장자.json</div><button class="b g" onclick="pickDir()">폴더 지정</button> <span id="dirname">${dirHandle?'저장 폴더: '+esc(dirHandle.name):'(지정 안 함 = 브라우저 다운로드 폴더)'}</span></div>
+ <div class="card"><h3>${esc(S.orgName)} 전체 데이터</h3><button class="b" onclick="saveData('server','')">서버 저장</button> <button class="b g" onclick="saveData('local','')">내 컴퓨터 저장</button></div>
+ ${sys?`<div class="card"><h3>전체 시스템 저장 (모든 기관·사용자)</h3><button class="b" onclick="saveData('server','','system')">서버 저장</button> <button class="b g" onclick="saveData('local','','system')">내 컴퓨터 저장 (현재 기관)</button></div>`:''}
+ <div class="card"><h3>사업단별 저장</h3>${T.units.filter(u=>rk()<=2||myUnits().includes(u.id)).map(u=>`<div style="margin:4px 0">${esc(u.name)} <button class="b s" onclick="saveData('server','${u.id}')">서버</button> <button class="b g s" onclick="saveData('local','${u.id}')">내 컴퓨터</button></div>`).join('')}</div>
+ ${rk()<=3?`<div class="card"><h3>홈페이지 반영용 내려받기</h3><div class="meta">notices.json / press.json / photos.json 과 files 폴더가 들어 있는 zip. 압축을 풀어 GitHub(홈페이지) 폴더에 덮어 올리면 됩니다.</div><a class="b" href="api.php?a=export_site">zip 내려받기</a></div>`:''}`}
+// ---------- 사업유형/사업단 ----------
+function vTypes(){const row=u=>`<div style="margin:3px 0 3px 18px">└ ${esc(u.name)} <button class="b r s" onclick="tdel('unit_del','${u.id}')">삭제</button></div>`;
+ $('main').innerHTML=`<h2>사업유형 · 사업단 관리</h2><div class="card"><div class="bar"><input id="tn" placeholder="새 사업유형명 (예: 공익활동)"><button class="b" onclick="tadd('type_add',{name:$('tn').value})">유형 추가</button></div></div>
+ ${T.types.map(t=>`<div class="card"><b>${esc(t.name)}</b> <button class="b r s" onclick="tdel('type_del','${t.id}')">유형 삭제</button>${T.units.filter(u=>u.typeId==t.id).map(row).join('')}
+ <div class="bar" style="margin:8px 0 0 18px"><input id="un_${t.id}" placeholder="새 사업단명"><button class="b s" onclick="tadd('unit_add',{typeId:'${t.id}',name:$('un_${t.id}').value})">사업단 추가</button></div></div>`).join('')}
+ <div class="card"><b>유형 없음</b>${T.units.filter(u=>!u.typeId).map(u=>u.id=='common'?`<div style="margin:3px 0 3px 18px">└ ${esc(u.name)} (기본)</div>`:row(u)).join('')}<div class="bar" style="margin:8px 0 0 18px"><input id="un_" placeholder="새 사업단명"><button class="b s" onclick="tadd('unit_add',{typeId:'',name:$('un_').value})">사업단 추가</button></div></div>`}
+async function tadd(a,d){await api(a,d);T=await get('types_get');vTypes()}
+async function tdel(a,id){if(!confirm('삭제할까요?'))return;await api(a,{id});T=await get('types_get');vTypes()}
+// ---------- 사용자 ----------
+async function vUsers(){const r=await get('users_list');const us=r.users.filter(u=>u.role!='top');
+ const stN={pending:'⏳ 승인대기',active:'✅ 사용중',rejected:'⛔ 중지/거절'};
+ $('main').innerHTML=`<h2>사용자 관리</h2><div class="meta">사업단 배정은 현재 선택된 기관(${esc(S.orgName)}) 기준입니다. 최고관리자·중간관리자는 모든 기관과 사업단에 접근합니다.</div>
+ <table><tr><th>이름(아이디)</th><th>직급</th><th>상태</th><th>소속기관/접근</th><th>처리</th></tr>${us.map(u=>{const lock=S.user.role=='mid'&&u.role=='mid';
+ return `<tr><td>${esc(u.name)}<br><small>${esc(u.id)}</small></td><td>${RN[u.role]}${u.canUnlock?' 🔓':''}</td><td>${stN[u.status]}</td><td>${(u.orgs||[]).map(o=>esc(S.orgs.find(x=>x.id==o)?.name||o)).join(', ')||'-'}</td>
+ <td>${lock?'-':`${u.status!='active'?`<button class="b s" onclick="uset('${u.id}',{status:'active'})">승인</button> `:`<button class="b o s" onclick="uset('${u.id}',{status:'rejected'})">중지</button> `}<button class="b g s" onclick="uedit('${u.id}')">권한/배정</button>`}</td></tr>`}).join('')||'<tr><td colspan=5>가입자가 없습니다.</td></tr>'}</table>`;window._us=us}
+async function uset(id,d){await api('user_update',{id,...d});toast('처리됨');vUsers()}
+function uedit(id){const u=window._us.find(x=>x.id==id),mu=u.units?.[S.org]||[];
+ $('mbox').innerHTML=`<h2>${esc(u.name)} 권한/배정</h2><label>직급</label><select id="e_role"><option value="admin" ${u.role=='admin'?'selected':''}>관리자</option><option value="staff" ${u.role=='staff'?'selected':''}>담당자</option>${S.user.role=='top'?`<option value="mid" ${u.role=='mid'?'selected':''}>중간관리자</option>`:''}</select>
+ <label>메뉴 접근</label><div class="chk">${Object.entries({notice:'공지사항',press:'보도자료',photo:'사진자료',closing:'월 마감'}).map(([k,v])=>`<label><input type="checkbox" class="e_m" value="${k}" ${u.menus.includes(k)?'checked':''}> ${v}</label>`).join('')}</div>
+ <label>담당 사업단 (${esc(S.orgName)})</label><div class="chk">${T.units.map(x=>`<label><input type="checkbox" class="e_u" value="${x.id}" ${mu.includes(x.id)?'checked':''}> ${esc(x.name)}</label>`).join('')}</div>
+ <label>접근 가능 기관 (지원 업무 등으로 다른 기관 접근을 열어줄 때)</label><div class="chk">${S.orgs.map(o=>`<label><input type="checkbox" class="e_o" value="${o.id}" ${(u.orgs||[]).includes(o.id)?'checked':''}> ${esc(o.name)}</label>`).join('')}</div>
+ ${S.user.role=='top'?`<label><input type="checkbox" id="e_cu" style="width:auto" ${u.canUnlock?'checked':''}> 마감 해제 자격 부여</label>`:''}
+ <label>비밀번호 재설정 (변경 시에만 입력)</label><input id="e_pw" type="password">
+ <div style="margin-top:16px;display:flex;gap:8px"><button class="b r" onclick="udel('${u.id}')">사용자 삭제</button><span style="flex:1"></span><button class="b g" onclick="closeM()">취소</button><button class="b" onclick="usave('${u.id}')">저장</button></div>`;$('modal').classList.add('on')}
+const chk=c=>[...document.querySelectorAll('.'+c+':checked')].map(x=>x.value);
+async function usave(id){const d={id,role:$('e_role').value,menus:chk('e_m'),units:chk('e_u'),orgs:chk('e_o')};if($('e_cu'))d.canUnlock=$('e_cu').checked;if($('e_pw').value)d.pw=$('e_pw').value;
+ await api('user_update',d);closeM();toast('저장됨');vUsers()}
+async function udel(id){if(!confirm('이 사용자를 삭제할까요?'))return;await api('user_update',{id,delete:1});closeM();vUsers()}
+// ---------- 기관 ----------
+async function vOrgs(){$('main').innerHTML=`<h2>기관 관리</h2><div class="card"><div class="bar"><input id="on" placeholder="새 기관명"><button class="b" onclick="oadd()">기관 추가</button></div></div>
+ ${S.orgs.map(o=>`<div class="card">🏢 ${esc(o.name)} <button class="b g s" onclick="oren('${o.id}','${esc(o.name)}')">이름변경</button> <button class="b r s" onclick="odel('${o.id}')">삭제</button></div>`).join('')}`}
+async function oadd(){await api('org_add',{name:$('on').value});boot()}
+async function oren(id,n){const v=prompt('새 기관명',n);if(v){await api('org_rename',{id,name:v});boot()}}
+async function odel(id){if(!confirm('기관을 삭제할까요? (데이터는 서버에 _deleted 폴더로 보관되며 목록에서만 사라집니다)'))return;await api('org_del',{id});boot()}
+boot();
+</script></body></html>
