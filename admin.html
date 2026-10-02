@@ -60,6 +60,7 @@ ol{padding-left:20px;line-height:1.8;margin:6px 0}
 <div class="tabs">
 <button id="tb-notice" onclick="setKind('notice')">📢 공지사항</button>
 <button id="tb-press" onclick="setKind('press')">📰 보도자료</button>
+<button id="tb-photo" onclick="setKind('photo')">📷 사진자료</button>
 </div>
 
 <div class="card">
@@ -108,7 +109,8 @@ var $=function(i){return document.getElementById(i)};
 var kind='notice', files=[], CFG={repo:'hyouksh-cyber/chamcoop',branch:'main',token:''};
 var KD={
   notice:{json:'notices.json',dir:'files/notice/',title:'공지사항 작성',tags:['안내','모집','채용공고','생산품','행사']},
-  press:{json:'press.json',dir:'files/press/',title:'보도자료 작성',tags:['지역소식','언론보도','보도자료']}
+  press:{json:'press.json',dir:'files/press/',title:'보도자료 작성',tags:['지역소식','언론보도','보도자료']},
+  photo:{json:'photos.json',dir:'files/photos/',title:'사진자료 작성',tags:['행사','활동사진','생산품','교육']}
 };
 try{var c=JSON.parse(localStorage.getItem('chamAdmin')||'{}');for(var k in c)CFG[k]=c[k]}catch(e){}
 $('repo').value=CFG.repo;$('branch').value=CFG.branch;$('token').value=CFG.token;
@@ -117,18 +119,18 @@ function saveCfg(){CFG={repo:$('repo').value.trim(),branch:$('branch').value.tri
   try{localStorage.setItem('chamAdmin',JSON.stringify(CFG))}catch(e){}say('설정이 저장되었습니다.','ok')}
 function say(t,c){var d=document.createElement('div');d.className=c||'';d.textContent=t;$('log').appendChild(d)}
 function clearLog(){$('log').innerHTML=''}
-function setKind(k){kind=k;$('tb-notice').className=k=='notice'?'on':'';$('tb-press').className=k=='press'?'on':'';
+function setKind(k){kind=k;$('tb-notice').className=k=='notice'?'on':'';$('tb-press').className=k=='press'?'on':'';$('tb-photo').className=k=='photo'?'on':'';
   $('ftitle').textContent=KD[k].title;$('pressOnly').style.display=k=='press'?'flex':'none';$('inlineWrap').style.display=k=='notice'?'block':'none';
   $('taglbl').textContent='분류 (예: '+KD[k].tags.slice(0,3).join(', ')+')';
   $('taglist').innerHTML=KD[k].tags.map(function(t){return '<option value="'+t+'">'}).join('');
-  $('filelbl').textContent=k=='notice'?'첨부 (사진, hwp, pdf 등)':'사진 (첫 번째 사진이 대표 이미지)';
-  $('fin').accept=k=='press'?'image/*':'';
-  if(k=='press')files=files.filter(function(f){return isImg(f)});
+  $('filelbl').textContent=k=='notice'?'첨부 (사진, hwp, pdf 등)':k=='photo'?'사진 (여러 장 가능, 첫 번째 사진이 대표)':'사진 (첫 번째 사진이 대표 이미지)';
+  $('fin').accept=k=='notice'?'':'image/*';
+  if(k!='notice')files=files.filter(function(f){return isImg(f)});
   renderFl();prev()}
 function isImg(f){return /^image\//.test(f.type)||/\.(jpe?g|png|gif|webp)$/i.test(f.name)}
 function addFiles(list){var arr=Array.prototype.slice.call(list);var p=Promise.resolve();
   arr.forEach(function(f){p=p.then(function(){
-    if(kind=='press'&&!isImg(f)){say('보도자료에는 사진만 올릴 수 있습니다: '+f.name,'er');return}
+    if(kind!='notice'&&!isImg(f)){say('이 메뉴에는 사진만 올릴 수 있습니다: '+f.name,'er');return}
     return (/^image\/(jpeg|png)/.test(f.type)?shrink(f):Promise.resolve(f)).then(function(x){files.push(x)})})});
   p.then(function(){renderFl();prev()})}
 function shrink(f){return new Promise(function(res){var im=new Image(),u=URL.createObjectURL(f);
@@ -157,6 +159,7 @@ function buildEntry(names){
     var e={tag:$('tag').value.trim()||'안내',date:dt,title:esc($('title').value.trim()),body:body};
     if(att.length)e.attachments=att;return e}
   var imgs=[];files.forEach(function(f,i){imgs.push(url(names[i]))});
+  if(kind=='photo'){if(!imgs.length)alert('사진을 1장 이상 선택하세요.');return {tag:$('tag').value.trim()||'활동사진',date:dt,title:esc($('title').value.trim()),body:body,images:imgs}}
   var e2={tag:$('tag').value.trim()||'소식',title:esc($('title').value.trim()),body:body};
   if($('source').value.trim())e2.source=$('source').value.trim();
   if($('url').value.trim())e2.url=$('url').value.trim();
@@ -166,7 +169,7 @@ function buildEntry(names){
 function prev(){if(!$('title').value.trim()){$('prev').textContent='제목을 입력하면 표시됩니다.';return}
   $('prev').textContent=JSON.stringify(buildEntry(storedNames()),null,2)}
 ['date','tag','title','body','source','url','inline'].forEach(function(i){$(i).addEventListener('input',prev);$(i).addEventListener('change',prev)});
-function check(){if(!$('title').value.trim()){alert('제목을 입력하세요.');return false}if(!$('date').value){alert('날짜를 선택하세요.');return false}return true}
+function check(){if(kind=='photo'&&!files.length){alert('사진을 1장 이상 선택하세요.');return false}if(!$('title').value.trim()){alert('제목을 입력하세요.');return false}if(!$('date').value){alert('날짜를 선택하세요.');return false}return true}
 // ---- 수동 ----
 function manual(){if(!check())return;var names=storedNames(),e=buildEntry(names);
   var s=JSON.stringify(e,null,2).replace(/^/gm,'  ')+',';
@@ -195,8 +198,8 @@ function publish(){if(!check())return;clearLog();$('goBtn').disabled=true;
   .then(function(){say('✅ 올리기 완료! 1~2분 뒤 홈페이지에 반영됩니다.','ok');files=[];renderFl();['title','body','source','url'].forEach(function(i){$(i).value=''});prev();loadList()})
   .catch(function(err){say('❌ '+err.message,'er')}).then(function(){$('goBtn').disabled=false})}
 function loadList(){if(!CFG.token)return;var out=$('list');out.innerHTML='불러오는 중…';
-  Promise.all([getJson('notices.json'),getJson('press.json')]).then(function(r){var h='';
-    [['notice',r[0]],['press',r[1]]].forEach(function(x){h+='<b>'+(x[0]=='notice'?'📢 공지사항':'📰 보도자료')+'</b>';
+  Promise.all([getJson('notices.json'),getJson('press.json'),getJson('photos.json')]).then(function(r){var h='';
+    [['notice',r[0]],['press',r[1]],['photo',r[2]]].forEach(function(x){h+='<b>'+({notice:'📢 공지사항',press:'📰 보도자료',photo:'📷 사진자료'}[x[0]])+'</b>';
       h+=x[1].data.map(function(it,i){return '<div class="item"><span>'+(it.date?it.date+' · ':'')+it.title+'</span><button class="b r s" onclick="del(\''+x[0]+'\','+i+')">삭제</button></div>'}).join('')||'<div class="item"><small>없음</small></div>'});
     out.innerHTML=h}).catch(function(err){out.textContent=err.message})}
 function del(k,i){if(!confirm('이 글을 홈페이지에서 삭제할까요?\n(올려둔 사진/파일은 저장소에 남습니다)'))return;
