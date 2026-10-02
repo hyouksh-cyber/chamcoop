@@ -101,9 +101,9 @@
                   return '<li>' + (p.image ? '<img src="' + esc(asset(p.image)) + '" alt="' + esc(p.title) + '" width="400" height="300" loading="lazy">' : '') + '<b>' + esc(p.title) + '</b>' + [p.period, p.slots ? p.slots + '명' : '', p.area].filter(Boolean).map(esc).join(' · ') + (p.content ? '<br>' + esc(p.content) : '') + '</li>';
                 }).join('') + '</ul>'
               : '<p class="none">' + esc(u.detail || '사업단 운영 정보 준비 중') + '</p>';
-            return '<div class="unit"><h4>' + esc(u.name) + '</h4>' + inner + '</div>';
+            return '<div class="unit"><h3>' + esc(u.name) + '</h3>' + inner + '</div>';
           }).join('');
-          return '<article class="biz-main"><div class="biz-top"><h3 class="biz-title">' + esc(b.title) + '</h3><span class="tag live">' + esc(b.statusLabel || '진행중') + '</span></div>'
+          return '<article class="biz-main"><div class="biz-top"><h2 class="biz-title">' + esc(b.title) + '</h2><span class="tag live">' + esc(b.statusLabel || '진행중') + '</span></div>'
             + '<p class="biz-desc">' + esc(b.desc) + '</p><div class="units">' + us + '</div></article>';
         }).join('');
         if(rest.length){
@@ -224,7 +224,7 @@
       pressList.innerHTML = list.map(function(p){
         var img = p.img ? '<img src="' + esc(asset(p.img)) + '" alt="" width="140" height="96" loading="lazy" onerror="this.style.display=\'none\'">' : '<span></span>';
         var src = p.url ? '<a class="src" href="' + esc(p.url) + '" target="_blank" rel="noopener">' + esc(p.source || '출처 보기') + ' ↗</a>' : '';
-        return '<article class="press-card">' + img + '<div><span class="tag">' + esc(p.tag || '소식') + '</span><h4>' + esc(p.title) + '</h4><p>' + esc(plain(p.body)) + '</p>' + src + '</div></article>';
+        return '<article class="press-card">' + img + '<div><span class="tag">' + esc(p.tag || '소식') + '</span><h3>' + esc(p.title) + '</h3><p>' + esc(plain(p.body)) + '</p>' + src + '</div></article>';
       }).join('');
     });
   }
@@ -255,7 +255,7 @@
       PHOTOS = (list || []).filter(function(p){ return p.images && p.images.length; });
       if(!PHOTOS.length){ photoList.outerHTML = '<p class="empty">등록된 사진이 없습니다. 활동 사진이 올라오면 이 자리에 표시됩니다.</p>'; return; }
       photoList.innerHTML = PHOTOS.map(function(p, i){
-        return '<button class="photo-card" data-i="' + i + '"><div class="th"><img src="' + esc(asset(p.images[0])) + '" alt="" width="400" height="300" loading="lazy"></div><h4>' + esc(p.title) + '</h4><small>' + esc(p.date || '') + '</small></button>';
+        return '<button class="photo-card" data-i="' + i + '"><div class="th"><img src="' + esc(asset(p.images[0])) + '" alt="" width="400" height="300" loading="lazy"></div><span class="pt">' + esc(p.title) + '</span><small>' + esc(p.date || '') + '</small></button>';
       }).join('');
       photoList.addEventListener('click', function(e){
         var c = e.target.closest('.photo-card'); if(!c) return;
