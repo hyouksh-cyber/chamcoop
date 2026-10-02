@@ -248,3 +248,58 @@ footer .copy{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair-co
 }
 @media(max-width:520px){.prod-grid{grid-template-columns:1fr}.photo-grid{grid-template-columns:1fr 1fr}.brand b{font-size:15px}.notice summary{grid-template-columns:auto 1fr}.nd{grid-column:2}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+
+/* ===== 다중 페이지 구조 ===== */
+.menu a[aria-current="page"]{background:var(--soft);color:var(--ink);box-shadow:inset 0 -2px 0 var(--primary)}
+.drawer a[aria-current="page"]{font-weight:700}
+.page-head{padding:72px 0 48px;border-bottom:1px solid var(--hair-cool)}
+.page-head h1{font-size:clamp(32px,4.4vw,48px);line-height:1.15;font-weight:500;letter-spacing:-.03em}
+.page-head p{margin-top:16px;font-size:18px;line-height:1.55;color:var(--mute);max-width:38em}
+.subnav{display:flex;gap:8px;flex-wrap:wrap;margin-top:28px}
+.sec-foot{margin-top:32px}
+.more-link{display:inline-flex;align-items:center;gap:6px;font-size:14px;font-weight:600;text-decoration:none;border-bottom:1px solid var(--ink);padding-bottom:2px}
+.more-link:hover{color:var(--mute);border-color:var(--mute)}
+.sec-top{display:flex;justify-content:space-between;align-items:flex-end;gap:24px;flex-wrap:wrap;margin-bottom:40px}
+.sec-top .h2{margin:0}
+
+/* 홈: 일자리 유형 */
+.cells{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.cell{display:flex;flex-direction:column;gap:10px;padding:28px 24px 32px 0;text-decoration:none;border-bottom:1px solid var(--hair-cool);transition:background .15s}
+.cell+.cell{padding-left:24px;border-left:1px solid var(--hair-cool)}
+.cell .num{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+.cell b{font-size:20px;font-weight:500;line-height:1.35;letter-spacing:-.2px}
+.cell .sub{font-size:14px;color:var(--mute)}
+.cell:hover b{text-decoration:underline;text-underline-offset:4px}
+
+/* 홈: 참여 3단계 */
+.split{display:grid;grid-template-columns:1fr 1.4fr;gap:72px;align-items:start}
+.steps{border-top:1px solid var(--ink)}
+.step{display:grid;grid-template-columns:48px 1fr;gap:16px;padding:22px 0;border-bottom:1px solid var(--hair-cool)}
+.step .n{font-size:22px;font-weight:500;color:var(--mute);font-variant-numeric:tabular-nums}
+.step h3{font-size:18px;font-weight:600}
+.step p{margin-top:4px;font-size:15px;color:var(--mute)}
+.call{margin-top:28px;font-size:15px;color:var(--mute)}.call b{display:block;margin-top:2px;font-size:28px;font-weight:500;color:var(--ink);letter-spacing:-.42px;font-variant-numeric:tabular-nums}
+
+/* 홈: 최신 소식 */
+.rows{border-top:1px solid var(--ink)}
+.rows .row{display:grid;grid-template-columns:auto 1fr auto;gap:16px;align-items:center;padding:18px 0;border-bottom:1px solid var(--hair-cool);text-decoration:none}
+.rows .row:hover .nt{text-decoration:underline;text-underline-offset:4px}
+
+/* 기관소개: 연혁 */
+.tl-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--ink)}
+.tl-cell{padding:24px 20px 28px 0;border-bottom:1px solid var(--hair-cool)}
+.tl-cell:not(:nth-child(4n+1)){padding-left:20px;border-left:1px solid var(--hair-cool)}
+.tl-cell .y{font-size:28px;font-weight:500;letter-spacing:-.42px;font-variant-numeric:tabular-nums}
+.tl-cell ul{margin-top:12px}
+.tl-cell li{font-size:15px;color:var(--ink-2);padding:3px 0 3px 14px;position:relative}
+.tl-cell li::before{content:"";position:absolute;left:0;top:.8em;width:5px;height:5px;border-radius:50%;background:var(--primary)}
+.about-two{display:grid;grid-template-columns:1.2fr 1fr;gap:72px;align-items:start}
+
+/* 소식 페이지 */
+.news-block+.news-block{margin-top:88px}
+.news-block h2{font-size:28px;font-weight:500;letter-spacing:-.42px;margin-bottom:24px}
+
+@media(max-width:1080px){.cells,.tl-grid{grid-template-columns:repeat(2,1fr)}.cell+.cell{border-left:0;padding-left:0}.cell:nth-child(even){padding-left:24px;border-left:1px solid var(--hair-cool)}.tl-cell:not(:nth-child(4n+1)){padding-left:0;border-left:0}.tl-cell:nth-child(even){padding-left:20px;border-left:1px solid var(--hair-cool)}}
+@media(max-width:860px){.split,.about-two{grid-template-columns:1fr;gap:40px}.page-head{padding:48px 0 32px}}
+@media(max-width:520px){.cells,.tl-grid{grid-template-columns:1fr}.cell:nth-child(even),.tl-cell:nth-child(even){padding-left:0;border-left:0}.rows .row{grid-template-columns:auto 1fr}.rows .row .nd{grid-column:2}}
+@media(max-width:600px){.br-pc{display:none}}
