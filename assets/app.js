@@ -46,15 +46,34 @@
   if(f){
     f.outerHTML =
       '<footer><div class="wrap"><div class="grid"><div><b>참살이사회적협동조합</b><address>'
-      + '사업자등록번호 497-82-00175<br>대전광역시 대덕구 대전로 1032번길 51 (오정동), 3층<br>'
-      + '전화 042-331-8012 / 070-7842-6070 · 팩스 070-7842-6099<br>'
-      + '이메일 chamcoop2018@naver.com · 평일 08:00–17:30 (점심 12:00–13:00)</address></div>'
+      + '사업자등록번호 497-82-00175<br><span data-site="address">대전광역시 대덕구 대전로 1032번길 51 (오정동) 3층</span><br>'
+      + '전화 <span data-site="phone">042-331-8012</span> / <span data-site="phone2">070-7842-6070</span> · 팩스 <span data-site="fax">070-7842-6099</span><br>'
+      + '이메일 <span data-site="email">chamcoop2018@naver.com</span> · <span data-site="hours">평일 08:00–17:30</span> (점심 <span data-site="lunch">12:00–13:00</span>)</address></div>'
       + '<div class="links"><a href="https://www.daejeon.go.kr" target="_blank" rel="noopener">대전광역시</a>'
       + '<a href="https://www.daedeok.go.kr" target="_blank" rel="noopener">대덕구청</a>'
       + '<a href="http://www.ddsc.or.kr" target="_blank" rel="noopener">대덕구시니어클럽</a>'
       + '<a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청</a></div></div>'
       + '<p class="copy">© 참살이사회적협동조합. All rights reserved.</p></div></footer>';
   }
+
+  // ============================================================
+  // 홈페이지 문구 (site.json) — 관리자 페이지 "문구" 탭에서 수정합니다.
+  // data-site="키" 가 붙은 곳의 글자를 바꿉니다. *별표* 는 강조, 줄바꿈은 그대로 반영.
+  // site.json 이 없거나 값이 비어 있으면 페이지에 적힌 기존 문구를 그대로 씁니다.
+  // ============================================================
+  getJSON('site.json', {}, function(site){
+    if(!site) return;
+    var safe = function(t){ return String(t).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); };
+    Array.prototype.forEach.call(document.querySelectorAll('[data-site]'), function(el){
+      var v = site[el.getAttribute('data-site')];
+      if(v == null || String(v).trim() === '') return;
+      var em = el.getAttribute('data-em') === 'mark' ? ['<span class="mark">', '</span>'] : ['<b>', '</b>'];
+      var br = el.getAttribute('data-br') === 'pc' ? '<br class="br-pc">' : '<br>';
+      el.innerHTML = safe(v).replace(/\*([^*]+)\*/g, em[0] + '$1' + em[1]).replace(/\r?\n/g, br);
+    });
+    if(site.phone) Array.prototype.forEach.call(document.querySelectorAll('a[href^="tel:"]'), function(a){ a.href = 'tel:' + site.phone.replace(/[^0-9]/g, ''); });
+    if(site.email) Array.prototype.forEach.call(document.querySelectorAll('a[href^="mailto:"]'), function(a){ a.href = a.href.replace(/^mailto:[^?]*/, 'mailto:' + site.email); });
+  });
 
   // 모바일 메뉴: 링크 이동, 화면 확대/축소, Esc, 해시 변경 어느 경우에도 닫힘
   var burger = $('burger'), drawer = $('drawer');
@@ -124,7 +143,7 @@
   if(joinAcc){
     var JOIN = [
       { t:'노인공익활동사업 참여방법', c:['만 65세 이상 기초연금 수급자 중 심신 건강한 분','기초생활수급자 제외 (의료급여·교육급여·주거급여 수급자는 신청 가능)','건강보험 직장가입자 · 사업자등록증 보유자 제외','장기요양보험 1~5등급, 인지지원등급 판정자 제외'], h:['신분증, 주민등록등본(3개월 이내) 지참 후 방문 접수'] },
-      { t:'노인역량활용사업 참여방법', c:['만 60세 이상 심신 건강한 분','기초수급자 · 건강보험 직장가입자 · 사업자등록증 보유자 제외','실업급여 수급 종료 후 90일 이후 참여 가능'], h:['신분증, 주민등록등본(3개월 이내) 지참 후 방문 접수 → 면접'] },
+      { t:'노인역량활용사업 참여방법', c:['만 65세 이상 심신 건강한 분 (일부 사업은 만 60세 이상)','기초수급자 · 건강보험 직장가입자 · 사업자등록증 보유자 제외','실업급여 수급 종료 후 90일 이후 참여 가능'], h:['신분증, 주민등록등본(3개월 이내) 지참 후 방문 접수 → 면접'] },
       { t:'공동체사업단 참여방법', c:['만 60세 이상 심신 건강한 분','기초수급자 · 건강보험 직장가입자 · 사업자등록증 보유자 제외','사업 특성에 적합한 분','장기요양보험 1~5등급, 인지지원등급 판정자 제외'], h:['신분증, 주민등록등본(3개월 이내) 지참 후 방문 접수 → 면접'] },
       { t:'취업지원(취업알선형) 참여방법', c:['만 60세 이상 심신 건강한 분','기초수급자 · 건강보험 직장가입자 · 사업자등록증 보유자 제외','사업 특성에 적합한 분'], h:['신분증, 주민등록등본(3개월 이내) 지참 후 방문 접수 → 면접'] }
     ];

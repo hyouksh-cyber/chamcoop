@@ -79,6 +79,7 @@ ol{padding-left:20px;line-height:1.8;margin:6px 0}
 <button id="tb-photo" onclick="setKind('photo')">📷 사진자료</button>
 <button id="tb-biz" onclick="setKind('biz')">🏢 사업</button>
 <button id="tb-prod" onclick="setKind('prod')">🫐 상품</button>
+<button id="tb-site" onclick="setKind('site')">✏️ 홈페이지 문구</button>
 </div>
 
 <div id="postArea">
@@ -163,6 +164,16 @@ ol{padding-left:20px;line-height:1.8;margin:6px 0}
 <div class="card"><h2>현재 등록된 상품 <button class="b g s" onclick="loadProd()">새로고침</button></h2><div id="pList"><small>토큰 설정 후 자동으로 불러옵니다.</small></div></div>
 </div>
 
+<div id="siteArea" style="display:none">
+<div class="card">
+<h2>홈페이지 문구 수정</h2>
+<p class="hint">고친 뒤 맨 아래 "홈페이지에 올리기"를 누르면 1~2분 뒤 홈페이지에 반영됩니다. <b>*별표*</b>로 감싼 글자는 강조(굵게/형광펜)로, 줄바꿈은 그대로 표시됩니다. 칸을 비워 두면 원래 문구가 나옵니다.</p>
+<div id="sFields"><small>토큰 설정 후 자동으로 불러옵니다.</small></div>
+<div style="margin-top:14px"><button class="b" id="sGo" onclick="siteSave()">🚀 홈페이지에 올리기</button> <button class="b g" onclick="loadSite()">다시 불러오기</button></div>
+<div id="slog" class="log"></div>
+</div>
+</div>
+
 <div class="card" id="listCard">
 <h2>현재 등록된 글 <button class="b g s" onclick="loadList()">목록 불러오기</button></h2>
 <div id="list"><small>토큰 설정 후 "목록 불러오기"를 누르면 삭제할 수 있습니다.</small></div>
@@ -187,10 +198,11 @@ function saveCfg(){CFG={repo:$('repo').value.trim(),branch:$('branch').value.tri
 var LOG='log';
 function say(t,c){var d=document.createElement('div');d.className=c||'';d.textContent=t;$(LOG).appendChild(d)}
 function clearLog(){$(LOG).innerHTML=''}
-function setKind(k){endEdit();endBizEdit();kind=k;var pk=(k!='biz'&&k!='prod');
-  ['notice','press','photo','biz','prod'].forEach(function(x){$('tb-'+x).className=x==k?'on':''});
-  $('postArea').style.display=pk?'block':'none';$('listCard').style.display=pk?'block':'none';$('bizArea').style.display=k=='biz'?'block':'none';$('prodArea').style.display=k=='prod'?'block':'none';
-  LOG=k=='biz'?'blog':k=='prod'?'plog':'log';
+function setKind(k){endEdit();endBizEdit();kind=k;var pk=(k!='biz'&&k!='prod'&&k!='site');
+  ['notice','press','photo','biz','prod','site'].forEach(function(x){$('tb-'+x).className=x==k?'on':''});
+  $('postArea').style.display=pk?'block':'none';$('listCard').style.display=pk?'block':'none';$('bizArea').style.display=k=='biz'?'block':'none';$('prodArea').style.display=k=='prod'?'block':'none';$('siteArea').style.display=k=='site'?'block':'none';
+  LOG=k=='biz'?'blog':k=='prod'?'plog':k=='site'?'slog':'log';
+  if(k=='site'){loadSite();return}
   if(k=='biz'){loadBiz();return}if(k=='prod'){loadProd();return}
 
   $('ftitle').textContent=KD[k].title;$('pressOnly').style.display=k=='press'?'flex':'none';$('inlineWrap').style.display=k=='notice'?'block':'none';
@@ -388,6 +400,24 @@ function prodSave(){clearLog();if(!$('p_name').value.trim())return alert('상품
   .catch(function(e){say('❌ '+e.message,'er')}).then(function(){$('pGo').disabled=false})}
 function prodDel(i){if(!confirm('이 상품을 홈페이지에서 삭제할까요?'))return;
   getJson('products.json').then(function(cur){var t=cur.data.splice(i,1)[0];return saveJson('products.json',cur.data,cur.sha,'상품 삭제: '+(t&&t.name))}).then(function(){clearLog();say('삭제되었습니다. 1~2분 뒤 반영됩니다.','ok');loadProd()}).catch(function(e){alert(e.message)})}
+var SITE=null,SF=[
+['g','첫 화면'],['heroTitle','큰 제목',2],['heroLead','큰 제목 아래 설명',2],['joinLead','참여 안내 문장',2],['donateTitle','후원 제목'],['donateLead','후원 설명',2],
+['g','기관소개 페이지'],['aboutTitle','제목'],['aboutLead','제목 아래 설명',2],['aboutBody1','소개 글 1',4],['aboutBody2','소개 글 2',4],
+['g','다른 페이지 제목 아래 설명'],['businessLead','사업·참여방법',2],['shopTitle','생산품 페이지 제목'],['shopLead','생산품 설명',2],['newsLead','소식',2],['contactLead','후원·오시는길',2],
+['g','연락처 (모든 페이지 공통)'],['phone','대표 전화'],['phone2','보조 전화'],['fax','팩스'],['email','이메일'],['address','주소'],['hours','근무시간 (예: 평일 08:00–17:30)'],['lunch','점심시간 (예: 12:00–13:00)']];
+function loadSite(){if(!CFG.token){$('sFields').textContent='연결 설정에서 토큰을 먼저 저장하세요.';return}
+  $('sFields').textContent='불러오는 중…';
+  getJson('site.json').then(function(r){SITE=r;var d=Array.isArray(r.data)?{}:r.data;
+    $('sFields').innerHTML=SF.map(function(f){if(f[0]=='g')return '<h3 style="margin:24px 0 0;font-size:16px">'+f[1]+'</h3>';
+      var v=esc(d[f[0]]||''),id='s_'+f[0];
+      return '<label for="'+id+'">'+f[1]+'</label>'+(f[2]?'<textarea id="'+id+'" rows="'+f[2]+'">'+v+'</textarea>':'<input id="'+id+'" value="'+v+'">')}).join('')})
+  .catch(function(e){$('sFields').textContent=e.message})}
+function siteSave(){if(!SITE)return alert('먼저 문구를 불러오세요.');clearLog();$('sGo').disabled=true;
+  getJson('site.json').then(function(cur){var d=Array.isArray(cur.data)?{}:cur.data;
+    SF.forEach(function(f){if(f[0]!='g'&&$('s_'+f[0]))d[f[0]]=$('s_'+f[0]).value.trim()});
+    say('저장 중…');return saveJson('site.json',d,cur.sha,'홈페이지 문구 수정')})
+  .then(function(){say('✅ 올리기 완료! 1~2분 뒤 홈페이지에 반영됩니다.','ok');loadSite()})
+  .catch(function(e){say('❌ '+e.message,'er')}).then(function(){$('sGo').disabled=false})}
 $('date').value=new Date().toISOString().slice(0,10);setKind('notice');if(CFG.token)loadList();
 </script>
 </body>
