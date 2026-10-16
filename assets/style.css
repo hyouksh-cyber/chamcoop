@@ -305,3 +305,135 @@ footer .copy{margin-top:40px;padding-top:20px;border-top:1px solid var(--hair-co
 @media(max-width:600px){.br-pc{display:none}}
 
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+/* =====================================================================
+   시안 D 테마 (2026.10) — 로고 초록 + 먹색, 포털형 구성
+   위의 기본 스타일을 덮어씁니다. 색을 바꿀 때는 아래 :root 만 고치면 됩니다.
+   ===================================================================== */
+:root{
+  --primary:#00591b; --primary-deep:#004514; --on-primary:#ffffff;
+  --ink:#1b2a1f; --ink-2:#2c3a30; --mute:#5a685d; --mute-2:#7d8a80;
+  --soft:#f3f6f2; --night:#1b2a1f; --night-2:#24342a;
+  --hair:#dde5da; --hair-strong:#c6d1c3; --hair-cool:#e6ece4;
+  --green-soft:#eef5ec; --green-mid:#16743a;
+  --wrap:1240px;
+}
+:focus-visible{outline:2px solid var(--primary)}
+.btn{font-weight:600;font-size:15px;border-radius:999px;min-height:44px;padding:11px 22px}
+.btn-lg{min-height:50px;padding:14px 26px;font-size:16px}
+.btn-outline:hover{border-color:var(--primary);color:var(--primary)}
+
+/* 상단 안내줄 + 머리글 */
+.topbar{background:var(--soft);border-bottom:1px solid var(--hair-cool);font-size:13px;color:var(--mute)}
+.topbar .wrap{display:flex;justify-content:flex-end;gap:20px;min-height:34px;align-items:center}
+.topbar a{text-decoration:none;color:inherit;padding:6px 0}.topbar a:hover{color:var(--primary)}
+.site-header{background:rgba(255,255,255,.96)}
+.nav{height:76px}
+.brand img{width:46px;height:46px}
+.brand .bt{display:flex;flex-direction:column;line-height:1.2}
+.brand b{font-size:21px;font-weight:800;color:var(--primary);letter-spacing:-.6px}
+.brand small{font-size:12px;color:var(--mute);font-weight:500}
+.menu{gap:8px}
+.menu a{font-size:17px;font-weight:700;color:var(--ink);padding:10px 16px}
+.menu a:hover{background:var(--green-soft);color:var(--primary)}
+.menu a[aria-current="page"]{color:var(--primary);background:var(--green-soft)}
+
+/* 홈: 메인 사진 */
+.d-hero{position:relative;background:#1b2a1f;overflow:hidden}
+.d-hero>img{width:100%;height:clamp(440px,46vw,640px);object-fit:cover;object-position:center 60%}
+.d-hero .shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,22,13,.5) 0%,rgba(8,22,13,.22) 40%,rgba(8,22,13,0) 65%)}
+.d-hero .in{position:absolute;inset:0;display:flex;align-items:flex-end}
+.d-hero .in .wrap{width:100%;padding-bottom:48px}
+.d-hero .txt{max-width:640px;color:#fff;text-shadow:0 2px 14px rgba(0,0,0,.45);display:flex;flex-direction:column;gap:16px;align-items:flex-start}
+.d-hero .chip{border:1px solid rgba(255,255,255,.65);border-radius:999px;padding:5px 14px;font-size:14px;font-weight:600}
+.d-hero h1{font-size:clamp(30px,4vw,52px);font-weight:850;line-height:1.25;letter-spacing:-1.6px}
+.d-hero p{font-size:18px;color:#eef4ee}
+.d-hero .cta{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;text-shadow:none}
+.d-hero .btn-white{background:#fff;color:var(--primary)}
+.d-hero .btn-line{border:2px solid #fff;color:#fff;background:transparent}
+.d-hero .cap{position:absolute;right:16px;top:16px;background:rgba(27,42,31,.8);color:#fff;border-radius:999px;padding:6px 14px;font-size:13px}
+
+/* 홈: 사업유형 4칸 */
+.d-types{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;padding-top:32px}
+.d-type{border:1px solid var(--hair);border-radius:20px;overflow:hidden;background:#fff;text-decoration:none;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+.d-type:hover{border-color:var(--primary);transform:translateY(-2px)}
+.d-type img{width:100%;height:180px;object-fit:cover}
+.d-type .b{padding:18px 20px 20px;display:flex;flex-direction:column;gap:6px}
+.d-type h3{font-size:20px;font-weight:850;color:var(--primary);display:flex;justify-content:space-between;letter-spacing:-.5px}
+.d-type p{font-size:15px;color:var(--mute)}
+.d-type .u{font-size:14px;font-weight:700;color:var(--green-mid)}
+
+/* 홈: 소식 탭 + 상담 */
+.d-news{display:flex;flex-wrap:wrap;gap:16px;padding-top:32px}
+.d-board{flex:999 1 560px;min-width:0;border:1px solid var(--hair);border-radius:20px;padding:8px 24px 16px}
+.d-tabs{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;border-bottom:2px solid var(--primary)}
+.d-tabs [role=tablist]{display:flex;gap:4px}
+.d-tabs button{border:0;background:transparent;color:var(--mute);border-radius:12px 12px 0 0;padding:12px 18px;font:700 17px var(--font);cursor:pointer}
+.d-tabs button[aria-selected="true"]{background:var(--primary);color:#fff}
+.d-tabs .more{font-size:15px;color:var(--mute);text-decoration:none;padding:10px 0}
+.d-rows .row{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:14px 0;border-bottom:1px solid var(--hair-cool);text-decoration:none}
+.d-rows .tag{background:var(--green-soft);color:var(--primary);border-radius:6px;padding:2px 10px;font-size:13px;font-weight:700}
+.d-rows .nt{flex:1 1 260px;min-width:0;font-size:17px;font-weight:500}
+.d-rows .row:hover .nt{color:var(--primary)}
+.d-rows .nd{font-size:15px;color:var(--mute-2)}
+.d-side{flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:16px}
+.d-call{background:var(--primary);color:#fff;border-radius:20px;padding:24px;display:flex;flex-direction:column;gap:4px}
+.d-call small{font-size:15px;color:#dcebdc}
+.d-call a{color:#fff;font-size:32px;font-weight:900;letter-spacing:-.5px;text-decoration:none}
+.d-quick{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.d-quick a{border:1px solid var(--hair);border-radius:16px;padding:16px;font-size:16px;font-weight:700;text-decoration:none;display:flex;flex-direction:column;gap:2px}
+.d-quick a:hover{border-color:var(--primary);color:var(--primary)}
+.d-quick small{font-size:13px;font-weight:400;color:var(--mute)}
+
+/* 홈: 공통 섹션 머리 */
+.d-sec{padding-top:48px}
+.d-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:20px}
+.d-head h2{font-size:clamp(24px,2.6vw,30px);font-weight:900;letter-spacing:-.8px}
+.d-head a{font-size:15px;color:var(--mute);text-decoration:none;padding:10px 0}
+.d-note{margin-top:16px;background:var(--green-soft);border-radius:16px;padding:14px 20px;font-size:15px;color:var(--primary);font-weight:500}
+#homeProds{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+
+/* 홈: 현장 스케치 */
+.d-gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.d-gallery figure{margin:0;display:flex;flex-direction:column;gap:8px}
+.d-gallery img{width:100%;height:220px;object-fit:cover;border-radius:16px}
+.d-gallery figcaption{font-size:15px;color:var(--mute)}
+
+/* 홈: 참여·후원 */
+.d-join{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.d-card{border:1px solid var(--hair);border-radius:20px;overflow:hidden;display:flex;flex-wrap:wrap}
+.d-card img{flex:1 1 200px;min-width:0;height:220px;object-fit:cover}
+.d-card .b{flex:1 1 220px;min-width:0;padding:24px;display:flex;flex-direction:column;gap:8px;justify-content:center;align-items:flex-start}
+.d-card h3{font-size:22px;font-weight:900;color:var(--primary)}
+.d-card p{font-size:16px;color:var(--mute)}
+.d-card a.go{font-size:16px;font-weight:700;color:var(--primary);text-decoration:none;padding:8px 0}
+
+/* 관련기관 + 바닥글 */
+.d-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;padding-bottom:56px}
+.d-links a{border:1px solid var(--hair);border-radius:14px;padding:16px;text-align:center;font-size:16px;font-weight:700;text-decoration:none}
+.d-links a:hover{border-color:var(--primary);color:var(--primary)}
+footer{background:var(--night);color:#cfd8d0;border-top:0}
+footer b{color:#fff}
+footer address{color:#cfd8d0}
+footer .links a{color:#cfd8d0;border-color:#3b4b40}
+footer .links a:hover{color:#fff}
+footer .copy{color:#8d9a90}
+footer .nts{display:inline-block;margin-top:12px;background:#fff;color:var(--night);border-radius:12px;padding:10px 16px;font-size:14px;font-weight:700;text-decoration:none}
+
+/* 하위 페이지 머리 */
+.page-head{background:var(--soft);border-bottom:1px solid var(--hair-cool)}
+.page-head h1{color:var(--primary);letter-spacing:-1px}
+section.block.soft{background:var(--soft)}
+.tag.live{background:var(--primary);color:#fff}
+.add{border-radius:999px}
+.add.on{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+@media (max-width:720px){
+  .topbar .wrap{justify-content:center}
+  .nav{height:64px}.brand img{width:38px;height:38px}.brand b{font-size:18px}.brand small{display:none}
+  .d-hero .in .wrap{padding-bottom:28px}
+  .d-hero p br{display:none}
+}
+@media (max-width:720px){
+  .d-hero .shade{background:linear-gradient(0deg,rgba(8,22,13,.62) 0%,rgba(8,22,13,.3) 55%,rgba(8,22,13,.05) 100%)}
+}

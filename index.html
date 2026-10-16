@@ -24,94 +24,84 @@
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" href="assets/logo.png">
 <link rel="preload" href="assets/fonts/PretendardVariable.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=6">
+<link rel="stylesheet" href="assets/style.css?v=7">
 </head>
 <body>
 <a class="skip" href="#main">본문으로 바로가기</a>
 <div id="siteHeader"></div>
 <main id="main">
-<section class="hero" id="top">
-  <div class="wrap hero-grid">
-    <div>
-      <h1 data-site="heroTitle" data-br="pc" data-em="mark">어르신의 <span class="mark">일할 자리</span>가 <br class="br-pc">지역의 건강한 내일이 됩니다</h1>
-      <p class="lead" data-site="heroLead">취업취약계층의 일자리를 만들고, 판매수익 전액을 다시 일자리에 씁니다.</p>
-      <div class="cta">
-        <a class="btn btn-primary btn-lg" href="business.html">사업 살펴보기</a>
-        <a class="btn btn-outline btn-lg" href="shop.html">생산품 보기</a>
+<section class="d-hero" id="top">
+  <img src="files/site/hero.jpg" alt="국립부여박물관 계단을 함께 오르는 참여자들" width="1920" height="1440" fetchpriority="high">
+  <div class="shade"></div>
+  <div class="in"><div class="wrap"><div class="txt">
+    <span class="chip">보건복지부 인가 사회적협동조합 · 대전 대덕구</span>
+    <h1 data-site="heroTitle">사람의 일과 지역의 가치를<br>함께 만들어갑니다.</h1>
+    <p data-site="heroLead">어르신과 취업취약계층의 지속가능한 일자리,<br>참살이사회적협동조합이 함께합니다.</p>
+    <div class="cta"><a class="btn btn-lg btn-white" href="about.html">조합소개 바로가기 →</a><a class="btn btn-lg btn-line" href="business.html#join">참여 신청 방법</a></div>
+  </div></div></div>
+  <span class="cap">문화활동 · 국립부여박물관</span>
+</section>
+
+<div class="wrap">
+  <section class="d-types" aria-label="사업 유형">
+    <a class="d-type" href="business.html"><img src="files/site/type-public.jpg" alt="재활용품을 분리하는 청결대덕 참여자들" width="900" height="507" loading="lazy"><div class="b"><h3>노인공익활동사업<span aria-hidden="true">→</span></h3><p>지역사회 공익을 위한 활동</p><span class="u">청결대덕 155명</span></div></a>
+    <a class="d-type" href="business.html"><img src="files/site/type-capacity.jpg" alt="소화전 앞 차량에 안내문을 전하는 참여자" width="900" height="675" loading="lazy"><div class="b"><h3>노인역량활용사업<span aria-hidden="true">→</span></h3><p>경력과 역량을 살린 사회서비스</p><span class="u">돌봄·금융·소방안전 3개 사업단</span></div></a>
+    <a class="d-type" href="business.html"><img src="files/site/type-community.jpg" alt="공동작업장에서 올갱이를 손질하는 참여자들" width="900" height="675" loading="lazy"><div class="b"><h3>공동체사업단<span aria-hidden="true">→</span></h3><p>함께 만들고 판매하는 일자리</p><span class="u">블루베리 농장·공동작업장</span></div></a>
+    <a class="d-type" href="business.html"><img src="files/site/type-employ.jpg" alt="공원 길을 비질하는 참여자" width="900" height="507" loading="lazy"><div class="b"><h3>취업지원<span aria-hidden="true">→</span></h3><p>교육 후 수요처로 취업 연계</p><span class="u">미화·경비 등 수요처 연계</span></div></a>
+  </section>
+
+  <section class="d-news" aria-label="소식">
+    <div class="d-board">
+      <div class="d-tabs"><div role="tablist" id="newsTabs" aria-label="소식 분류"><button type="button" role="tab" data-k="notice" aria-selected="true">공지사항</button><button type="button" role="tab" data-k="press" aria-selected="false">보도자료</button><button type="button" role="tab" data-k="recruit" aria-selected="false">채용·모집</button></div><a class="more" href="news.html">더보기 +</a></div>
+      <div class="d-rows" id="homeNews"></div>
+    </div>
+    <div class="d-side">
+      <div class="d-call"><small>참여·후원 전화 상담</small><a href="tel:0423318012" data-site="phone">042-331-8012</a><small><span data-site="hours">평일 08:00–17:30</span> · 점심 <span data-site="lunch">12:00–13:00</span> 제외</small></div>
+      <div class="d-quick">
+        <a href="business.html#join">참여 신청<small>조건·서류 안내</small></a>
+        <a href="shop.html">생산품 주문<small>블루베리·잼·다슬기</small></a>
+        <a href="contact.html#donate">후원 안내<small>정기·일시 후원</small></a>
+        <a href="contact.html#visit">오시는 길<small>대덕구 오정동</small></a>
       </div>
     </div>
-    <div class="hero-media" aria-hidden="true">
-      <figure class="m1"><img src="files/products/blueberry_fresh.jpg" alt="" width="800" height="800" fetchpriority="high"></figure>
-      <figure><img src="files/products/jam_set.jpg" alt="" width="600" height="450"></figure>
-      <figure><img src="files/products/blueberry_bag.jpg" alt="" width="600" height="450"></figure>
-    </div>
-  </div>
-</section>
+  </section>
 
-<section class="facts" aria-label="참살이 한눈에 보기">
-  <div class="wrap facts-grid">
-    <div class="fact"><b>2017</b><span>설립총회</span></div>
-    <div class="fact"><b>2018</b><span>보건복지부 사회적협동조합 인가</span></div>
-    <div class="fact"><b id="statBiz">4개+</b><span>운영 중인 일자리 사업단</span></div>
-    <div class="fact"><b>100%</b><span>판매수익 일자리 재투자</span></div>
-  </div>
-</section>
-
-<section class="block">
-  <div class="wrap">
-    <div class="sec-top">
-      <h2 class="h2">어르신이 일하는 네 가지 방법</h2>
-      <a class="more-link" href="business.html">사업 전체 보기 →</a>
-    </div>
-    <div class="cells" id="homeUnits"></div>
-  </div>
-</section>
-
-<section class="block soft">
-  <div class="wrap split">
-    <div>
-      <h2 class="h2">참여는 이렇게 시작합니다</h2>
-      <p class="sec-lead" data-site="joinLead">사업별 참여조건과 제외대상은 사업 페이지에서 확인하실 수 있습니다.</p>
-      <p class="call">전화 문의<b data-site="phone">042-331-8012</b></p>
-      <div class="sec-foot"><a class="btn btn-primary" href="business.html#join">참여조건 확인</a></div>
-    </div>
-    <div class="steps"><div class="step"><span class="n">1</span><div><h3>신청·면접</h3><p>신분증, 주민등록등본(3개월 이내)을 지참해 방문하시면 접수가 이루어지고, 사업에 따라 면접도 함께 진행됩니다.</p></div></div><div class="step"><span class="n">2</span><div><h3>선발</h3><p>보건복지부 지침의 선발기준표(소득, 참여경력, 활동역량 등)에 따라 점수가 높은 순으로 선발합니다.</p></div></div><div class="step"><span class="n">3</span><div><h3>조 배치</h3><p>선발된 분을 사업단과 활동 조에 배치합니다.</p></div></div><div class="step"><span class="n">4</span><div><h3>교육</h3><p>활동 전에 사업 수행에 필요한 교육을 받습니다.</p></div></div><div class="step"><span class="n">5</span><div><h3>활동 시작</h3><p>배치된 사업단에서 활동을 시작합니다.</p></div></div></div>
-  </div>
-</section>
-
-<section class="block">
-  <div class="wrap">
-    <div class="sec-top">
-      <h2 class="h2">일자리가 만든 좋은 먹거리</h2>
-      <a class="more-link" href="shop.html">생산품 전체 보기 →</a>
-    </div>
+  <section class="d-sec" aria-label="생산품">
+    <div class="d-head"><h2>일자리로 만든 생산품</h2><a href="shop.html">전체 보기 +</a></div>
     <div class="prod-grid" id="homeProds"></div>
-  </div>
-</section>
+    <p class="d-note">판매수익은 전액 취약계층 일자리를 만드는 데 다시 사용합니다.</p>
+  </section>
 
-<section class="block soft">
-  <div class="wrap">
-    <div class="sec-top">
-      <h2 class="h2">참살이 소식</h2>
-      <a class="more-link" href="news.html">소식 전체 보기 →</a>
+  <section class="d-sec" aria-label="현장 스케치">
+    <div class="d-head"><h2>현장 스케치</h2><a href="news.html#photos">사진 더보기 +</a></div>
+    <div class="d-gallery">
+      <figure><img src="files/site/gallery-farm.jpg" alt="블루베리를 수확하는 참여자들" width="900" height="676" loading="lazy"><figcaption>참살이사업 · 장동 블루베리 농장</figcaption></figure>
+      <figure><img src="files/site/type-community.jpg" alt="공동작업장에서 올갱이를 손질하는 참여자들" width="900" height="675" loading="lazy"><figcaption>참살이 공동작업장 · 오정동</figcaption></figure>
+      <figure><img src="files/site/gallery-museum.jpg" alt="박물관 전시실에 둘러앉아 해설을 듣는 참여자들" width="900" height="416" loading="lazy"><figcaption>문화활동 · 국립부여박물관</figcaption></figure>
+      <figure><img src="files/site/gallery-bank.jpg" alt="ATM 이용을 돕는 참여자" width="392" height="631" loading="lazy"><figcaption>스마트금융도우미 · 은행 안내</figcaption></figure>
     </div>
-    <div class="rows" id="homeNotices"></div>
-  </div>
-</section>
+  </section>
 
-<section class="donate">
-  <div class="wrap donate-grid">
-    <div>
-      <h2 class="h2" data-site="donateTitle">작은 후원이 어르신의 일자리가 됩니다</h2>
-      <p class="sec-lead" data-site="donateLead">정기·일시 후원 모두 가능합니다. 연락 주시면 절차를 안내해 드립니다.</p>
-      <div class="cta"><a class="btn btn-primary btn-lg" href="contact.html#donate">후원 안내 보기</a></div>
+  <section class="d-sec d-join" aria-label="참여와 후원">
+    <div class="d-card"><img src="files/site/type-employ.jpg" alt="" width="900" height="507" loading="lazy"><div class="b"><h3>참여 신청</h3><p>신분증, 주민등록등본(3개월 이내)을 지참해 방문 접수해 주세요.</p><a class="go" href="business.html#join">참여 조건 보기 →</a></div></div>
+    <div class="d-card"><img src="files/site/join-culture.jpg" alt="" width="900" height="507" loading="lazy"><div class="b"><h3>후원 안내</h3><p data-site="donateLead">정기·일시 후원 모두 가능합니다. 연락 주시면 절차를 안내해 드립니다.</p><a class="go" href="contact.html#donate">후원 방법 보기 →</a></div></div>
+  </section>
+
+  <section class="d-sec" aria-label="관련기관 바로가기">
+    <div class="d-head"><h2>관련기관 바로가기</h2></div>
+    <div class="d-links">
+      <a href="https://www.mohw.go.kr" target="_blank" rel="noopener">보건복지부</a>
+      <a href="https://www.kordi.or.kr" target="_blank" rel="noopener">한국노인인력개발원</a>
+      <a href="https://www.seniorro.or.kr" target="_blank" rel="noopener">노인일자리 여기</a>
+      <a href="https://www.daejeon.go.kr" target="_blank" rel="noopener">대전광역시</a>
+      <a href="https://www.daedeok.go.kr" target="_blank" rel="noopener">대덕구청</a>
+      <a href="http://www.ddsc.or.kr" target="_blank" rel="noopener">대덕구시니어클럽</a>
     </div>
-    <div class="tel"><small>전화 상담 · <span data-site="hours">평일 08:00–17:30</span></small><b data-site="phone">042-331-8012</b><small>점심시간 <span data-site="lunch">12:00–13:00</span> 제외</small></div>
-  </div>
-</section>
+  </section>
+</div>
 </main>
 <div id="siteFooter"></div>
 
-<script src="assets/app.js?v=6"></script>
+<script src="assets/app.js?v=7"></script>
 </body>
 </html>

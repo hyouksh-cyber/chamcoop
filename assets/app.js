@@ -22,11 +22,11 @@
   // 공통 머리글 / 바닥글  (메뉴를 바꿀 때는 NAV만 고치면 모든 페이지에 반영됩니다)
   // ============================================================
   var NAV = [
-    ['about.html', '기관소개'],
-    ['business.html', '사업·참여방법'],
+    ['about.html', '조합소개'],
+    ['business.html', '사업안내'],
     ['shop.html', '생산품'],
     ['news.html', '소식'],
-    ['contact.html', '후원·오시는길']
+    ['contact.html', '참여·후원']
   ];
   var page = (location.pathname.split('/').pop() || 'index.html');
   var links = function(cls){ return NAV.map(function(n){
@@ -35,12 +35,12 @@
   var h = $('siteHeader');
   if(h){
     h.outerHTML =
-      '<header class="site-header"><div class="wrap nav">'
-      + '<a class="brand" href="index.html" aria-label="참살이사회적협동조합 처음으로"><img src="assets/logo.png" alt="" width="32" height="33"><b translate="no">참살이사회적협동조합</b></a>'
+      '<div class="topbar"><div class="wrap"><a href="tel:0423318012">전화 <span data-site="phone">042-331-8012</span></a><a href="contact.html#visit">오시는 길</a><a href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청 공시</a></div></div>'
+      + '<header class="site-header"><div class="wrap nav">'
+      + '<a class="brand" href="index.html" aria-label="참살이사회적협동조합 처음으로"><img src="assets/logo.png" alt="" width="46" height="46"><span class="bt"><b translate="no">참살이사회적협동조합</b><small>일하고 싶은 이웃의 일자리를 만듭니다</small></span></a>'
       + '<nav class="menu" aria-label="주 메뉴">' + links() + '</nav>'
-      + '<a class="btn btn-primary nav-cta" href="contact.html#donate">후원하기</a>'
       + '<button class="burger" id="burger" aria-label="메뉴 열기" aria-expanded="false" aria-controls="drawer"><span></span></button>'
-      + '</div><nav class="drawer" id="drawer" aria-label="모바일 메뉴">' + links() + '<a href="contact.html#donate">후원하기</a></nav></header>';
+      + '</div><nav class="drawer" id="drawer" aria-label="모바일 메뉴">' + links() + '</nav></header>';
   }
   var f = $('siteFooter');
   if(f){
@@ -48,7 +48,8 @@
       '<footer><div class="wrap"><div class="grid"><div><b>참살이사회적협동조합</b><address>'
       + '사업자등록번호 497-82-00175<br><span data-site="address">대전광역시 대덕구 대전로 1032번길 51 (오정동) 3층</span><br>'
       + '전화 <span data-site="phone">042-331-8012</span> / <span data-site="phone2">070-7842-6070</span> · 팩스 <span data-site="fax">070-7842-6099</span><br>'
-      + '이메일 <span data-site="email">chamcoop2018@naver.com</span> · <span data-site="hours">평일 08:00–17:30</span> (점심 <span data-site="lunch">12:00–13:00</span>)</address></div>'
+      + '이메일 <span data-site="email">chamcoop2018@naver.com</span> · <span data-site="hours">평일 08:00–17:30</span> (점심 <span data-site="lunch">12:00–13:00</span>)</address>'
+      + '<a class="nts" href="https://www.nts.go.kr" target="_blank" rel="noopener">국세청 공익법인 공시 바로가기 ↗</a></div>'
       + '<div class="links"><a href="https://www.daejeon.go.kr" target="_blank" rel="noopener">대전광역시</a>'
       + '<a href="https://www.daedeok.go.kr" target="_blank" rel="noopener">대덕구청</a>'
       + '<a href="http://www.ddsc.or.kr" target="_blank" rel="noopener">대덕구시니어클럽</a>'
@@ -231,6 +232,26 @@
         }
       }
     });
+  }
+
+  // ============================================================
+  // 홈: 소식 탭 (공지사항 / 보도자료 / 채용·모집)
+  // ============================================================
+  var homeNews = $('homeNews');
+  if(homeNews){
+    var NEWS = { notice: [], press: [], recruit: [] };
+    var row = function(n, href){ return '<a class="row" href="' + href + '"><span class="tag">' + esc(n.tag || '소식') + '</span><span class="nt">' + esc(n.title) + '</span><span class="nd">' + esc(n.date || '') + '</span></a>'; };
+    var showTab = function(k){
+      Array.prototype.forEach.call(document.querySelectorAll('#newsTabs button'), function(b){ b.setAttribute('aria-selected', b.getAttribute('data-k') === k ? 'true' : 'false'); });
+      var href = k === 'press' ? 'news.html#press' : 'news.html#notice';
+      homeNews.innerHTML = NEWS[k].slice(0, 5).map(function(n){ return row(n, href); }).join('') || '<p class="empty">등록된 글이 없습니다.</p>';
+    };
+    getJSON('notices.json', [], function(list){
+      NEWS.notice = list || [];
+      NEWS.recruit = NEWS.notice.filter(function(n){ return /모집|채용/.test(n.tag || '') || /모집|채용/.test(n.title || ''); });
+      getJSON('press.json', [], function(p){ NEWS.press = p || []; showTab('notice'); });
+    });
+    $('newsTabs').addEventListener('click', function(e){ var b = e.target.closest('button'); if(b) showTab(b.getAttribute('data-k')); });
   }
 
   // ============================================================
