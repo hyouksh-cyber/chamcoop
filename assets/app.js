@@ -114,21 +114,27 @@
 
       if(bizList){
         var html = main.map(function(b){
-          var us = (b.units || []).map(function(u){
+          var us = (b.units || []).map(function(u, ui){
             var progs = (u.programs || []).filter(function(p){ return p && p.title; });
+            var people = progs.reduce(function(t, p){ return t + (parseInt(p.slots, 10) || 0); }, 0);
+            var meta = progs.length ? progs.length + '개 사업단' + (people ? ' · ' + people + '명' : '') : '';
             var inner = progs.length
-              ? '<ul class="prog">' + progs.map(function(p){
-                  return '<li>' + (p.image ? '<img src="' + esc(asset(p.image)) + '" alt="' + esc(p.title) + '" width="400" height="300" loading="lazy">' : '') + '<b>' + esc(p.title) + '</b>' + [p.period, p.slots ? p.slots + '명' : '', p.area].filter(Boolean).map(esc).join(' · ') + (p.content ? '<br>' + esc(p.content) : '') + '</li>';
-                }).join('') + '</ul>'
+              ? '<div class="pgrid">' + progs.map(function(p){
+                  return '<article class="pcard">' + (p.image ? '<img src="' + esc(asset(p.image)) + '" alt="' + esc(p.title) + ' 활동 모습" width="600" height="400" loading="lazy">' : '<div class="noimg">사진 준비 중</div>')
+                    + '<div class="pb"><div class="pt"><h4>' + esc(p.title) + '</h4>' + (p.slots ? '<span class="slots">' + esc(p.slots) + '명</span>' : '') + '</div>'
+                    + '<dl>' + (p.content ? '<div><dt>활동 내용</dt><dd>' + esc(p.content) + '</dd></div>' : '')
+                    + (p.area ? '<div><dt>활동 지역</dt><dd>' + esc(p.area) + '</dd></div>' : '')
+                    + (p.period ? '<div><dt>사업 기간</dt><dd>' + esc(p.period) + '</dd></div>' : '') + '</dl></div></article>';
+                }).join('') + '</div>'
               : '<p class="none">' + esc(u.detail || '사업단 운영 정보 준비 중') + '</p>';
-            return '<div class="unit"><h3>' + esc(u.name) + '</h3>' + inner + '</div>';
+            return '<section class="unit2"><div class="uh"><span class="no">' + String(ui + 1).padStart(2, '0') + '</span><h3>' + esc(u.name) + '</h3>' + (meta ? '<span class="meta">' + meta + '</span>' : '') + '</div>' + inner + '</section>';
           }).join('');
           return '<article class="biz-main"><div class="biz-top"><h2 class="biz-title">' + esc(b.title) + '</h2><span class="tag live">' + esc(b.statusLabel || '진행중') + '</span></div>'
-            + '<p class="biz-desc">' + esc(b.desc) + '</p><div class="units">' + us + '</div></article>';
+            + '<p class="biz-desc">' + esc(b.desc) + '</p>' + us + '</article>';
         }).join('');
         if(rest.length){
           html += '<div class="biz-more">' + rest.map(function(b){
-            return '<article class="biz-card"><span class="tag">' + esc(b.statusLabel || '확대 예정') + '</span><h3>' + esc(b.title) + '</h3><p>' + esc(b.desc) + '</p>'
+            return '<article class="biz-card"><span class="tag">' + esc(b.statusLabel || '준비 중') + '</span><h3>' + esc(b.title) + '</h3><p>' + esc(b.desc) + '</p>'
               + ((b.units || []).length ? '<ul>' + b.units.map(function(u){ return '<li>' + esc(u.name) + '</li>'; }).join('') + '</ul>' : '') + '</article>';
           }).join('') + '</div>';
         }

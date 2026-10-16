@@ -1,1 +1,64 @@
-[]
+[
+  {
+    "title": "문화활동 · 부여 궁남지와 국립부여박물관",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-culture-1.jpg",
+      "files/photos/2026-culture-2.jpg",
+      "files/photos/2026-culture-3.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "참살이사업 · 장동 블루베리 농장 수확",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-farm-1.jpg",
+      "files/photos/2026-farm-2.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "청결대덕 · 동네 분리수거와 정리 청소",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-clean-1.jpg",
+      "files/photos/2026-clean-2.jpg",
+      "files/photos/2026-clean-3.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "참살이 공동작업장 · 올갱이 손질",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-workshop-1.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "소방안전도우미 · 소화전 주변 주차 계도",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-fire-1.jpg",
+      "files/photos/2026-fire-2.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "스마트금융도우미 · 은행 ATM 안내",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-bank-1.jpg"
+    ],
+    "tag": "활동사진"
+  },
+  {
+    "title": "보육시설 돌봄도우미 · 놀이실 정리",
+    "date": "2026",
+    "images": [
+      "files/photos/2026-care-1.jpg"
+    ],
+    "tag": "활동사진"
+  }
+]

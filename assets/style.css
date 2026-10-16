@@ -437,3 +437,93 @@ section.block.soft{background:var(--soft)}
 @media (max-width:720px){
   .d-hero .shade{background:linear-gradient(0deg,rgba(8,22,13,.62) 0%,rgba(8,22,13,.3) 55%,rgba(8,22,13,.05) 100%)}
 }
+
+/* ---------- 시안 D: 하위 페이지 ---------- */
+/* 사진 머리 */
+.page-head.ph{position:relative;padding:0;border:0;background:#1b2a1f center/cover no-repeat;min-height:300px;display:flex;align-items:flex-end;overflow:hidden}
+.page-head.ph::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(8,22,13,.62) 0%,rgba(8,22,13,.32) 50%,rgba(8,22,13,.08) 100%)}
+.page-head.ph .wrap{position:relative;width:100%;padding-top:72px;padding-bottom:40px}
+.page-head.ph h1{color:#fff;font-weight:850;text-shadow:0 2px 14px rgba(0,0,0,.4)}
+.page-head.ph p{color:#eef4ee;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.page-head.ph .btn-outline{background:rgba(255,255,255,.12);color:#fff;border-color:rgba(255,255,255,.6)}
+.page-head.ph .btn-outline:hover{background:#fff;color:var(--primary)}
+.page-head.ph-biz{background-image:url("../files/site/type-public.jpg")}
+.page-head.ph-shop{background-image:url("../files/site/gallery-farm.jpg")}
+.page-head.ph-news{background-image:url("../files/site/gallery-museum.jpg")}
+.page-head.ph-about{background-image:url("../files/site/hero.jpg");background-position:center 60%}
+.page-head.ph-contact{background-image:url("../files/site/join-culture.jpg");background-position:center 30%}
+
+/* 공통 제목·섹션 */
+section.block{padding:72px 0}
+.h2,.news-block h2{font-weight:850;letter-spacing:-.8px}
+.h2{color:var(--ink)}
+.sec-lead{color:var(--mute)}
+
+/* 사업안내 */
+.biz-main{border:0;padding:0;background:transparent}
+.biz-title{font-size:clamp(26px,3vw,34px);font-weight:900;letter-spacing:-1px}
+.biz-desc{font-size:17px}
+.unit2{margin-top:48px}
+.unit2 .uh{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;padding-bottom:14px;border-bottom:2px solid var(--primary);margin-bottom:20px}
+.unit2 .no{font-size:15px;font-weight:800;color:var(--green-mid)}
+.unit2 h3{font-size:22px;font-weight:850;letter-spacing:-.6px}
+.unit2 .meta{margin-left:auto;font-size:15px;color:var(--mute)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.pcard{border:1px solid var(--hair);border-radius:20px;overflow:hidden;background:#fff;display:flex;flex-direction:column}
+.pcard img,.pcard .noimg{width:100%;height:200px;object-fit:cover;background:var(--soft)}
+.pcard .noimg{display:flex;align-items:center;justify-content:center;color:var(--mute-2);font-size:14px}
+.pcard .pb{padding:18px 20px 20px}
+.pcard .pt{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.pcard h4{font-size:20px;font-weight:850;color:var(--primary);letter-spacing:-.5px}
+.pcard .slots{background:var(--primary);color:#fff;border-radius:999px;padding:3px 12px;font-size:14px;font-weight:700;white-space:nowrap}
+.pcard dl{margin:0;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.pcard dl div{display:grid;grid-template-columns:64px 1fr;gap:10px}
+.pcard dt{color:var(--mute-2)}
+.pcard dd{margin:0;color:var(--ink-2)}
+.unit2 .none{background:var(--green-soft);border-radius:16px;padding:18px 22px;font-size:16px;color:var(--primary);font-weight:500}
+.steps{border-top:2px solid var(--primary);background:#fff;border-radius:0 0 20px 20px;padding:0 24px}
+.step .n{width:36px;height:36px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800}
+.acc{border-top:2px solid var(--primary)}
+.acc summary{font-size:20px;font-weight:800}
+.acc summary:hover{color:var(--primary)}
+.acc details[open] summary{color:var(--primary)}
+
+/* 생산품 */
+.prod{border-radius:20px;box-shadow:none;border-color:var(--hair)}
+.prod img{aspect-ratio:1/1}
+.prod small{color:var(--green-mid);font-weight:700}
+.prod h3{font-size:19px;font-weight:800;letter-spacing:-.4px}
+.prod .price b{font-size:17px;font-weight:800}
+.order-bar b{color:#a9d3a8}
+
+/* 소식 */
+.notice,.press{border-top:2px solid var(--primary)}
+.notice summary .tag,.d-rows .tag{background:var(--green-soft);color:var(--primary)}
+.notice summary{padding:18px 4px}
+.notice .nt{font-size:17px;font-weight:600}
+.notice summary:hover .nt{text-decoration:none;color:var(--primary)}
+.nbody{background:var(--soft);border-radius:14px;padding:18px 20px;margin:0 0 18px}
+.press-card{padding:20px 0}
+.press-card img{border-radius:12px}
+.press-card h3{font-weight:800}
+
+/* 조합소개·오시는길 */
+.dl{border-top:2px solid var(--primary)}
+.dl dt{color:var(--mute);font-weight:600}
+.tl-cell .y{font-weight:900;color:var(--primary)}
+.org-node{border-radius:12px;font-weight:700}
+.org-node.lead{background:var(--primary);border-color:var(--primary)}
+.c-card{border-radius:20px}
+.c-card h3{font-weight:850;color:var(--primary)}
+.donate{background:var(--primary)}
+.donate .sec-lead{color:#dcebdc}
+.donate .tel{border-top-color:rgba(255,255,255,.3)}
+.donate .tel small{color:#dcebdc}
+.donate .tel b{font-weight:900}
+.donate .btn-primary{background:#fff;color:var(--primary)}
+.donate .btn-outline{border-color:rgba(255,255,255,.6)}
+@media (max-width:720px){
+  .page-head.ph{min-height:220px}.page-head.ph .wrap{padding-top:48px;padding-bottom:28px}
+  .unit2 .meta{margin-left:0;width:100%}
+  .steps{padding:0 16px}
+}
