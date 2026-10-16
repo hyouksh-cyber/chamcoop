@@ -418,7 +418,7 @@ function siteSave(){if(!SITE)return alert('먼저 문구를 불러오세요.');c
     say('저장 중…');return saveJson('site.json',d,cur.sha,'홈페이지 문구 수정')})
   .then(function(){say('✅ 올리기 완료! 1~2분 뒤 홈페이지에 반영됩니다.','ok');loadSite()})
   .catch(function(e){say('❌ '+e.message,'er')}).then(function(){$('sGo').disabled=false})}
-$('date').value=new Date().toISOString().slice(0,10);setKind('notice');if(CFG.token)loadList();
+$('date').value=new Date().toISOString().slice(0,10);setKind(/^#(notice|press|photo|biz|prod|site)$/.test(location.hash)?location.hash.slice(1):'notice');if(CFG.token)loadList();
 </script>
 </body>
 </html>
