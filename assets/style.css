@@ -451,7 +451,7 @@ section.block.soft{background:var(--soft)}
 .page-head.ph-shop{background-image:url("../files/site/gallery-farm.jpg")}
 .page-head.ph-news{background-image:url("../files/site/gallery-museum.jpg")}
 .page-head.ph-about{background-image:url("../files/site/hero.jpg");background-position:center 60%}
-.page-head.ph-contact{background-image:url("../files/site/join-culture.jpg");background-position:center 30%}
+.page-head.ph-contact{background-image:url("../files/site/join-support.jpg");background-position:center 40%}
 
 /* 공통 제목·섹션 */
 section.block{padding:72px 0}
