@@ -72,6 +72,8 @@
       var br = el.getAttribute('data-br') === 'pc' ? '<br class="br-pc">' : '<br>';
       el.innerHTML = safe(v).replace(/\*([^*]+)\*/g, em[0] + '$1' + em[1]).replace(/\r?\n/g, br);
     });
+    var heroImg = document.querySelector('.d-hero > img');
+    if(heroImg && site.heroAlt && String(site.heroAlt).trim()) heroImg.alt = String(site.heroAlt).trim();
     if(site.phone) Array.prototype.forEach.call(document.querySelectorAll('a[href^="tel:"]'), function(a){ a.href = 'tel:' + site.phone.replace(/[^0-9]/g, ''); });
     if(site.email) Array.prototype.forEach.call(document.querySelectorAll('a[href^="mailto:"]'), function(a){ a.href = a.href.replace(/^mailto:[^?]*/, 'mailto:' + site.email); });
   });
